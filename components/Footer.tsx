@@ -2,6 +2,7 @@ import { FaLocationArrow } from "react-icons/fa6";
 
 import { socialMedia } from "@/data";
 import MagicButton from "./MagicButton";
+import { BackgroundBeams } from "./ui/Background-Beams";
 
 const Footer = () => {
   return (
@@ -31,6 +32,7 @@ const Footer = () => {
           ))}
         </div>
       </div>
+      <BackgroundBeams></BackgroundBeams>
     </footer>
   );
 };
