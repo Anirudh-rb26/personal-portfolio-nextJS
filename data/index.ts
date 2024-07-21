@@ -73,8 +73,8 @@ export const projects = [
     id: 1,
     title: "Airbnb Clone",
     des: "Full Functional Airbnb Clone made with NextJS",
-    img: "/p1.svg",
-    iconLists: ["/re.svg", "/tail.svg", "/ts.svg", "/three.svg", "/fm.svg"],
+    img: "/p1.png",
+    iconLists: ["/re.svg", "/tail.svg", "/ts.svg"],
     link: "https://airbnb-clone-3h68.vercel.app/",
   },
   {

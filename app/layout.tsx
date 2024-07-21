@@ -22,6 +22,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <meta
+          name="google-site-verification"
+          content="IEWA3fIKOto-Alr4pHly2HnYsftRRku4I8Y143kXcX0"
+        />
         <link rel="icon" href="/jsm-logo.png" sizes="any" />
       </head>
       <body className={inter.className}>
