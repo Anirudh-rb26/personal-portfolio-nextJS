@@ -2,13 +2,12 @@ import { FaLocationArrow } from "react-icons/fa6";
 
 import { socialMedia } from "@/data";
 import MagicButton from "./MagicButton";
-import { BackgroundBeams } from "./ui/Background-Beams";
 
 const Footer = () => {
   return (
-    <footer className="w-full pt-20 pb-10" id="contact">
+    <footer className="w-full pb-10 mb-[100px] md:md-5" id="contact">
       <div className="flex flex-col items-center">
-        <h1 className="heading lg:max-w-[45vw]">
+        <h1 className="heading lg:max-w-[45vw] pb-10">
           Reach Out to me on my socials,
           <span className="text-purple"> lets chat!</span>
         </h1>
@@ -32,7 +31,6 @@ const Footer = () => {
           ))}
         </div>
       </div>
-      <BackgroundBeams></BackgroundBeams>
     </footer>
   );
 };
