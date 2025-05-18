@@ -42,7 +42,7 @@ export default function Home() {
       <main className="flex-1 flex flex-col items-start justify-center px-4 md:px-8 lg:px-16">
         {/* Hero section */}
         <div className="text-start mb-8 md:mb-16 w-full">
-          <p className="text-[#9CA3AF] text-sm mb-2">Hello World. I am</p>
+          <p className="text-[#9CA3AF] text-sm mb-2">Hello world. I am</p>
           <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-bold mb-2">Anirudh</h1>
           <div className="flex text-[#3B82F6] text-lg md:text-xl text-start">
             <span>&gt; </span>
@@ -61,7 +61,7 @@ export default function Home() {
               <span className="text-[#6B7280]">{"// User Description"}</span>
               <br />
               <span className="text-white">
-                {"<p>I'm Anirudh — a software engineer who builds clean, efficient systems with a focus on real-world impact.</p>"}
+                {"<p>I'm Anirudh Jayakumar — a software engineer who builds clean, efficient systems with a focus on real-world impact.</p>"}
                 <br />
                 {"<p>I care about design, performance, and solving the right problems — not chasing hype.</p>"}
                 <br />
