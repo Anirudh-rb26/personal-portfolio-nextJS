@@ -1,103 +1,94 @@
-import Image from "next/image";
+"use client"
+
+import { TypingAnimation } from "@/components/ui/typing-animation";
+import { useEffect, useState, useRef } from "react";
+
+const typingText = [
+  'Full Stack Engineer',
+  'Front‑end Developer',
+  'Flutter Developer',
+  'AI Engineer (in progress)',
+];
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [index, setIndex] = useState(0);
+  const [isTypingComplete, setIsTypingComplete] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  // Reset typing state when text changes
+  useEffect(() => {
+    setIsTypingComplete(false);
+  }, [index]);
+
+  // Move to next text after current one completes
+  useEffect(() => {
+    if (isTypingComplete) {
+      // Wait for 1.5 seconds after typing completes before changing
+      timeoutRef.current = setTimeout(() => {
+        setIndex((i) => (i + 1) % typingText.length);
+      }, 1500);
+    }
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [isTypingComplete]);
+
+  return (
+    <div className="flex flex-col min-h-screen font-mono text-base leading-relaxed">
+      {/* Main content */}
+      <main className="flex-1 flex flex-col items-start justify-center px-4 md:px-8 lg:px-16">
+        {/* Hero section */}
+        <div className="text-start mb-8 md:mb-16 w-full">
+          <p className="text-[#9CA3AF] text-sm mb-2">Hello World. I am</p>
+          <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-bold mb-2">Anirudh</h1>
+          <div className="flex text-[#3B82F6] text-lg md:text-xl text-start">
+            <span>&gt; </span>
+            <TypingAnimation
+              className="text-[#3B82F6] text-lg md:text-xl text-start"
+              text={typingText[index]}
+              onComplete={() => setIsTypingComplete(true)}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          </div>
+        </div>
+
+        {/* Code-style info block */}
+        <div className="w-full text-left overflow-x-auto">
+          <pre className="text-white leading-relaxed text-sm md:text-base">
+            <code>
+              <span className="text-[#6B7280]">{"// User Description"}</span>
+              <br />
+              <span className="text-white">
+                {"<p>I'm Anirudh — a software engineer who builds clean, efficient systems with a focus on real-world impact.</p>"}
+                <br />
+                {"<p>I care about design, performance, and solving the right problems — not chasing hype.</p>"}
+                <br />
+                {"<p>Currently exploring better ways to build, learn, and grow through code.</p>"}
+              </span>
+              <br />
+              <br />
+              <span className="text-[#6B7280]">{"// e-mail"}</span>
+              <br />
+              <span className="text-[#10B981]">const</span> email ={" "}
+              <span className="text-[#F97316]">&quot;anirudhjayakumar.business@gmail.com&quot;</span>;
+              <br />
+              <br />
+              <span className="text-[#6B7280]">{"// Github page"}</span>
+              <br />
+              <span className="text-[#10B981]">const</span> githubLink ={" "}
+              <span className="text-[#F97316]">&quot;https://github.com/Anirudh-rb26&quot;</span>;
+              <br />
+              <br />
+              <span className="text-[#6B7280]">{"// X"}</span>
+              <br />
+              <span className="text-[#10B981]">const</span> XPage ={" "}
+              <span className="text-[#F97316]">&quot;https://x.com/anirudh_rb26&quot;</span>;
+            </code>
+          </pre>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }

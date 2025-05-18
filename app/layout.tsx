@@ -1,14 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/navbar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
 });
 
@@ -25,9 +21,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${jetbrainsMono.variable} antialiased bg-[#0b0f1c] font-mono text-base leading-relaxed relative overflow-hidden`}
       >
-        {children}
+        {/* Background gradients */}
+        <div className="fixed top-0 right-0 w-[500px] h-[500px] bg-[#10B981] opacity-20 blur-[100px] rounded-full -translate-y-1/4 translate-x-1/4 z-0"></div>
+        <div className="fixed top-1/2 left-1/2 w-[600px] h-[600px] bg-[#3B82F6] opacity-20 blur-[100px] rounded-full -translate-x-1/2 -translate-y-1/2 z-0"></div>
+
+        <Navbar></Navbar>
+        <div className="relative z-10">
+          {children}
+        </div>
       </body>
     </html>
   );
