@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import "./globals.css"
 import { JetBrains_Mono } from "next/font/google"
+import Navbar from "@/components/navbar";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -26,6 +27,7 @@ export default function RootLayout({
       <body
         className={`${jetbrainsMono.variable} antialiased bg-[#0b0f1c] font-mono text-base leading-relaxed relative`}
       >
+        <Navbar></Navbar>
         <div className="relative z-10 h-full overflow-auto">{children}</div>
       </body>
     </html>
