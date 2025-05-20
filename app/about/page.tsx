@@ -49,6 +49,13 @@ const projects = [
         link: "https://qpiai-pro.tech",
     },
     {
+        name: "AI Interview Bot",
+        description:
+            "An intelligent interviewing platform that conducts automated interviews based on resumes and job descriptions, providing comprehensive feedback and candidate evaluation.",
+        techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "Node.js", "Google AI Studio", "Supabase"],
+        link: "https://github.com/Anirudh-rb26/ai-interviewer",
+    },
+    {
         name: "Interview Question Generator",
         description:
             "AI-powered tool that generates customized interview questions based on job role, description, and experience level",
