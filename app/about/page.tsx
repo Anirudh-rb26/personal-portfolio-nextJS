@@ -31,7 +31,7 @@ const workExperience = [
     {
         company: "Qpi Ai",
         position: "Software Engineer",
-        duration: "2022 - 2023",
+        duration: "2024 - 2025",
         description: [
             "Spearheaded development of the patent‐pending Fewshot Annotation feature using API streams and Hatchet, delivering enterprise‐grade stability and performance optimization.",
             "Engineered critical ML infrastructure by implementing hyperparameter integration for model training pipelines and architecting LLM deployment workflows.",
@@ -351,7 +351,9 @@ const AboutPage = () => {
                                     <span className="text-[#9CA3AF]"> *</span>
                                     <br />
                                     <span className="text-[#9CA3AF]"> * Link: </span>
-                                    <span className="text-[#3B82F6]">{projects[activeItem].link}</span>
+                                    <span className="text-[#3B82F6] hover:underline">
+                                        <a href={projects[activeItem].link}>{projects[activeItem].link}</a>
+                                    </span>
                                     <br />
                                     <span className="text-[#6B7280]"> */</span>
                                 </code>
@@ -402,6 +404,16 @@ const AboutPage = () => {
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="text-[#3B82F6] hover:underline"
+                                            style={{
+                                                background: "linear-gradient(90deg, #72009C 0%, #72009C 50%, white 50%, white 100%)",
+                                                backgroundSize: "200% 100%",
+                                                WebkitBackgroundClip: "text",
+                                                backgroundClip: "text",
+                                                WebkitTextFillColor: "transparent",
+                                                transition: "background-position 0.5s ease-out"
+                                            }}
+                                            onMouseEnter={(e) => { e.currentTarget.style.backgroundPosition = "0% 0" }}
+                                            onMouseLeave={(e) => { e.currentTarget.style.backgroundPosition = "100% 0" }}
                                         >
                                             View Project →
                                         </a>
@@ -413,7 +425,7 @@ const AboutPage = () => {
                         {activeSection === "personal-info" && (
                             <div className="rounded-xl border border-[#374151] p-4">
                                 <div className="flex items-center mb-4">
-                                    <span className="text-white mr-2">@{personalInfo[0].name.toLowerCase().replace(/\s/g, "")}</span>
+                                    <span className="text-white mr-2">@anirudh</span>
                                     <span className="text-white text-xs ml-auto">• {personalInfo[0].location}</span>
                                 </div>
                                 <h3 className="text-[#6B7280] mb-3">Interests</h3>

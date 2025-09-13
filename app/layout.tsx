@@ -1,3 +1,5 @@
+
+
 import type React from "react"
 import type { Metadata } from "next"
 import "./globals.css"
@@ -25,7 +27,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${jetbrainsMono.variable} antialiased bg-[#0b0f1c] font-mono text-base leading-relaxed relative`}
+        className={`${jetbrainsMono.variable} antialiased bg-black font-mono text-base leading-relaxed relative`}
+        style={{ fontFamily: 'var(--font-jetbrains-mono), monospace' }}
       >
         <Navbar></Navbar>
         <div className="relative z-10 h-full overflow-auto">{children}</div>
