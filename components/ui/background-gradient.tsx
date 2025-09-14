@@ -3,7 +3,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
-// import { motion } from "motion/react";
 
 export const BackgroundGradient = ({
   children,
@@ -25,7 +24,7 @@ export const BackgroundGradient = ({
     },
   };
   return (
-    <div className={cn("relative p-[4px] group", containerClassName)}>
+    <div className={cn("relative p-[4px] group w-full max-w-full", containerClassName)}>
       <motion.div
         variants={animate ? variants : undefined}
         initial={animate ? "initial" : undefined}
@@ -43,8 +42,8 @@ export const BackgroundGradient = ({
           backgroundSize: animate ? "400% 400%" : undefined,
         }}
         className={cn(
-          "absolute inset-0 rounded-3xl z-[1] opacity-60 group-hover:opacity-100 blur-xl  transition duration-500 will-change-transform",
-          " bg-[radial-gradient(circle_farthest-side_at_0_100%,#9d4edd,transparent),radial-gradient(circle_farthest-side_at_100%_0,#c77dff,transparent),radial-gradient(circle_farthest-side_at_100%_100%,#e0aaff,transparent),radial-gradient(circle_farthest-side_at_0_0,#7209b7,#141316)]"
+          "absolute inset-0 rounded-3xl z-[1] opacity-60 group-hover:opacity-100 blur-xl transition duration-500 will-change-transform",
+          "bg-[radial-gradient(circle_farthest-side_at_0_100%,#9d4edd,transparent),radial-gradient(circle_farthest-side_at_100%_0,#c77dff,transparent),radial-gradient(circle_farthest-side_at_100%_100%,#e0aaff,transparent),radial-gradient(circle_farthest-side_at_0_0,#7209b7,#141316)]"
         )}
       />
       <motion.div
@@ -69,7 +68,9 @@ export const BackgroundGradient = ({
         )}
       />
 
-      <div className={cn("relative z-10", className)}>{children}</div>
+      <div className={cn("relative z-10 w-full max-w-full overflow-hidden", className)}>
+        {children}
+      </div>
     </div>
   );
 };

@@ -152,7 +152,7 @@ const AboutPage = () => {
                     w-[250px] p-0 border-r border-gray-800 
                     flex flex-col text-sm 
                     transform transition-transform duration-200 ease-in-out
-                    ${isMobileMenuOpen ? "translate-x-0 bg-[#1E1E1E]" : "-translate-x-full lg:translate-x-0"}
+                    ${isMobileMenuOpen ? "translate-x-0 bg-black" : "-translate-x-full lg:translate-x-0"}
                     ${isMobileMenuOpen ? "top-0" : "top-0"}
                     overflow-y-auto
                 `}
