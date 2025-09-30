@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: "Anirudh Jayakumar",
   description: "Fullstack Engineer/Developer",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/33.png",
   },
 }
 
