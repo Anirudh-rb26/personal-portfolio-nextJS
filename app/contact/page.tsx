@@ -1,6 +1,9 @@
-import { BackgroundGradient } from '@/components/ui/background-gradient';
-import { TypingAnimation } from '@/components/ui/typing-animation'
+"use client"
+
 import React from 'react'
+import { motion } from 'framer-motion';
+import { TypingAnimation } from '@/components/ui/typing-animation'
+import { BackgroundGradient } from '@/components/ui/background-gradient';
 
 const ContactPage = () => {
     const links = {
@@ -12,71 +15,78 @@ const ContactPage = () => {
     };
 
     return (
-        <div className="flex flex-col min-h-screen font-mono text-base leading-relaxed">
-            {/* Main content */}
-            <main className="flex-1 flex flex-col items-start justify-center px-4 sm:px-8 md:px-16 lg:px-55">
-                {/* Hero section */}
-                <div className="text-start mb-8 sm:mb-16 w-full">
-                    <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-bold mb-2">Check out</h1>
-                    <div className="flex text-[#3B82F6] text-lg sm:text-xl text-start">
-                        <TypingAnimation
-                            className="text-[#72009C] text-xl md:text-2xl text-start items-center align-middle"
-                            text="> My Socials"
-                        />
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.0 }}
+        >
+            <div className="flex flex-col min-h-screen font-mono text-base leading-relaxed">
+                {/* Main content */}
+                <main className="flex-1 flex flex-col items-start justify-center px-4 sm:px-8 md:px-16 lg:px-55">
+                    {/* Hero section */}
+                    <div className="text-start mb-8 sm:mb-16 w-full">
+                        <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-bold mb-2">Check out</h1>
+                        <div className="flex text-[#3B82F6] text-lg sm:text-xl text-start">
+                            <TypingAnimation
+                                className="text-[#72009C] text-xl md:text-2xl text-start items-center align-middle"
+                                text="> My Socials"
+                            />
+                        </div>
                     </div>
-                </div>
 
-                {/* Code-style info block */}
-                <div className="w-full text-left">
-                    {/* <pre className="text-white leading-relaxed text-sm sm:text-base whitespace-pre-wrap break-all border-2 border-white p-14 rounded-2xl"> */}
-                    <div>
+                    {/* Code-style info block */}
+                    <div className="w-full text-left">
+                        {/* <pre className="text-white leading-relaxed text-sm sm:text-base whitespace-pre-wrap break-all border-2 border-white p-14 rounded-2xl"> */}
+                        <div>
 
-                        <BackgroundGradient className="bg-black rounded-2xl p-14 text-white" animate={true} containerClassName=''>
-                            <code>
-                                <span className="text-[#6B7280]">{"// e-mail"}</span>
-                                <br />
-                                <span className="text-[#00CED1]">const</span> email ={" "}
-                                <a href={links.email} className="text-[#F97316] break-words hover:underline" target="_blank" rel="noopener noreferrer">
-                                    &quot;anirudhjayakumar.business@gmail.com&quot;
-                                </a>;
-                                <br />
-                                <br />
-                                <span className="text-[#6B7280]">{"// Github page"}</span>
-                                <br />
-                                <span className="text-[#00CED1]">const</span> githubLink ={" "}
-                                <a href={links.github} className="text-[#F97316] break-words hover:underline" target="_blank" rel="noopener noreferrer">
-                                    &quot;https://github.com/Anirudh-rb26&quot;
-                                </a>;
-                                <br />
-                                <br />
-                                <span className="text-[#6B7280]">{"// X"}</span>
-                                <br />
-                                <span className="text-[#00CED1]">const</span> XPage ={" "}
-                                <a href={links.x} className="text-[#F97316] break-words hover:underline" target="_blank" rel="noopener noreferrer">
-                                    &quot;https://x.com/anirudh_rb26&quot;
-                                </a>;
-                                <br />
-                                <br />
-                                <span className="text-[#6B7280]">{"// LinkedIn page"}</span>
-                                <br />
-                                <span className="text-[#00CED1]">const</span> linkedinLink ={" "}
-                                <a href={links.linkedin} className="text-[#F97316] break-words hover:underline" target="_blank" rel="noopener noreferrer">
-                                    &quot;https://linkedin.com/in/anirudhjayakumar&quot;
-                                </a>;
-                                <br />
-                                <br />
-                                <span className="text-[#6B7280]">{"// Instagram page"}</span>
-                                <br />
-                                <span className="text-[#00CED1]">const</span> instagramLink ={" "}
-                                <a href={links.instagram} className="text-[#F97316] break-words hover:underline" target="_blank" rel="noopener noreferrer">
-                                    &quot;https://instagram.com/anirudh.cr2&quot;
-                                </a>;
-                            </code>
-                        </BackgroundGradient>
+                            <BackgroundGradient className="bg-black rounded-2xl p-14 text-white" animate={true} containerClassName=''>
+                                <code>
+                                    <span className="text-[#6B7280]">{"// e-mail"}</span>
+                                    <br />
+                                    <span className="text-[#00CED1]">const</span> email ={" "}
+                                    <a href={links.email} className="text-[#F97316] break-words hover:underline" target="_blank" rel="noopener noreferrer">
+                                        &quot;anirudhjayakumar.business@gmail.com&quot;
+                                    </a>;
+                                    <br />
+                                    <br />
+                                    <span className="text-[#6B7280]">{"// Github page"}</span>
+                                    <br />
+                                    <span className="text-[#00CED1]">const</span> githubLink ={" "}
+                                    <a href={links.github} className="text-[#F97316] break-words hover:underline" target="_blank" rel="noopener noreferrer">
+                                        &quot;https://github.com/Anirudh-rb26&quot;
+                                    </a>;
+                                    <br />
+                                    <br />
+                                    <span className="text-[#6B7280]">{"// X"}</span>
+                                    <br />
+                                    <span className="text-[#00CED1]">const</span> XPage ={" "}
+                                    <a href={links.x} className="text-[#F97316] break-words hover:underline" target="_blank" rel="noopener noreferrer">
+                                        &quot;https://x.com/anirudh_rb26&quot;
+                                    </a>;
+                                    <br />
+                                    <br />
+                                    <span className="text-[#6B7280]">{"// LinkedIn page"}</span>
+                                    <br />
+                                    <span className="text-[#00CED1]">const</span> linkedinLink ={" "}
+                                    <a href={links.linkedin} className="text-[#F97316] break-words hover:underline" target="_blank" rel="noopener noreferrer">
+                                        &quot;https://linkedin.com/in/anirudhjayakumar&quot;
+                                    </a>;
+                                    <br />
+                                    <br />
+                                    <span className="text-[#6B7280]">{"// Instagram page"}</span>
+                                    <br />
+                                    <span className="text-[#00CED1]">const</span> instagramLink ={" "}
+                                    <a href={links.instagram} className="text-[#F97316] break-words hover:underline" target="_blank" rel="noopener noreferrer">
+                                        &quot;https://instagram.com/anirudh.cr2&quot;
+                                    </a>;
+                                </code>
+                            </BackgroundGradient>
+                        </div>
                     </div>
-                </div>
-            </main>
-        </div>
+                </main>
+            </div>
+        </motion.div>
     )
 }
 

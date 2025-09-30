@@ -1,10 +1,9 @@
-
-
-import type React from "react"
-import type { Metadata } from "next"
 import "./globals.css"
-import { JetBrains_Mono } from "next/font/google"
+import type React from "react"
 import Navbar from "@/components/navbar";
+
+import type { Metadata } from "next"
+import { JetBrains_Mono } from "next/font/google"
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -13,7 +12,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Anirudh Jayakumar",
-  description: "Fullstack Engineer | Flutter Developer",
+  description: "Fullstack Engineer/Developer",
   icons: {
     icon: "/favicon.ico",
   },
