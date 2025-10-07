@@ -1,8 +1,14 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { Check, ChevronRight, ChevronDown, FileText, Folder } from "lucide-react"
+import { AnimatePresence, motion } from "framer-motion"
 import React, { useState, useEffect } from "react"
+import { ChevronRight } from "lucide-react"
+import FolderSection from "@/components/folder-selection"
+import FileItem from "@/components/file-item"
+import ContentPanel from "@/components/content-panel"
+import CodeBlock from "@/components/code-block"
+import SkillCard from "@/components/skill-card"
+import ProjectCard from "@/components/project-card"
 
 type Section = "personal-info" | "work-experience" | "projects"
 
@@ -50,6 +56,18 @@ const projects = [
         link: "https://qpiai-pro.tech",
     },
     {
+        name: "Reveiw Co-Pilot",
+        description: "AI-powered review analytics platform using FastAPI and Next.js — leveraging NLTK sentiment analysis, TF-IDF similarity search, and Gemini LLM responses with a SQLite backend.",
+        techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "FastAPI", "Scikit", "NLTK", "Gemini", "Python"],
+        link: "https://review-copilot-frontend.vercel.app/"
+    },
+    {
+        name: "Convoflow",
+        description: "Real-time AI chat system that combines LiveKit's real-time communication capabilities with memory-enhanced contextual conversations using Mem0 and Google's Gemini AI.",
+        techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "FastAPI", "LiveKit", "Mem0", "Gemini"],
+        link: "https://github.com/Anirudh-rb26/ConvoFlow"
+    },
+    {
         name: "AI Interview Bot",
         description:
             "An intelligent interviewing platform that conducts automated interviews based on resumes and job descriptions, providing comprehensive feedback and candidate evaluation.",
@@ -84,15 +102,15 @@ const projects = [
 ]
 
 const AboutPage = () => {
-    const [activeSection, setActiveSection] = useState<Section>("personal-info")
-    const [activeItem, setActiveItem] = useState(0)
+    const [activeItem, setActiveItem] = useState(0);
+    const [activeSection, setActiveSection] = useState<Section>("personal-info");
+    const [isMounted, setIsMounted] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [expandedSections, setExpandedSections] = useState<Record<Section, boolean>>({
         "personal-info": true,
         "work-experience": false,
         projects: false,
-    })
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-    const [isMounted, setIsMounted] = useState(false)
+    });
 
     useEffect(() => {
         setIsMounted(true)
@@ -133,6 +151,7 @@ const AboutPage = () => {
 
     return (
         <motion.div
+            className="mt-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -143,314 +162,232 @@ const AboutPage = () => {
                 <main className="flex-1 flex flex-col lg:flex-row overflow-auto">
                     {/* Mobile Menu Toggle - Embedded in content */}
                     <div className="lg:hidden p-4 border-b border-gray-800">
-                        <button
-                            className="flex items-center gap-2 px-4 py-2 border border-gray-800 rounded-md hover:bg-[#2A2D2E] transition-colors text-[#CCCCCC]"
+                        <motion.button
+                            className="mobile-toggle flex items-center gap-2 px-4 py-2 border border-gray-800 rounded-md hover:bg-[#2A2D2E] transition-colors text-[#CCCCCC]"
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         >
-                            <ChevronRight size={20} className={`transition-transform ${isMobileMenuOpen ? "rotate-90" : ""}`} />
+                            <motion.div className="absolute inset-0 bg-[#72009C] opacity-0 group-hover:opacity-10 transition-opacity" />
+                            <motion.div
+                                animate={{ rotate: isMobileMenuOpen ? 90 : 0 }}
+                                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                            >
+                                <ChevronRight size={20} />
+                            </motion.div>
                             <span>Explorer</span>
-                        </button>
+                        </motion.button>
                     </div>
 
+                    {/* Mobile Menu Backdrop */}
+                    <AnimatePresence>
+                        {isMobileMenuOpen && (
+                            <motion.div
+                                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 lg:hidden"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                            />
+                        )}
+                    </AnimatePresence>
+
                     {/* Left Sidebar - File Explorer */}
-                    <aside
-                        className={`
-                    fixed lg:static inset-y-0 left-0 z-40
-                    w-[250px] p-0 border-r border-gray-800 
-                    flex flex-col text-sm 
-                    transform transition-transform duration-200 ease-in-out
-                    ${isMobileMenuOpen ? "translate-x-0 bg-black" : "-translate-x-full lg:translate-x-0"}
-                    ${isMobileMenuOpen ? "top-0" : "top-0"}
-                    overflow-y-auto
-                `}
+                    {/* ${isMobileMenuOpen ? "top-0" : "top-0"} */}
+                    <motion.aside
+                        className={`fixed lg:static inset-y-0 left-0 z-40 w-[250px] p-0 border-r border-gray-800  flex flex-col text-sm transform transition-transform duration-200 ease-in-out 
+                            ${isMobileMenuOpen ? "translate-x-0 bg-black" : "-translate-x-full lg:translate-x-0"} 
+                            overflow-y-auto`}
+                        style={{ transform: isMobileMenuOpen ? 'translateX(0)' : undefined }}
                     >
                         <div className="p-2 text-[#CCCCCC] uppercase text-xs border-b border-gray-800 font-semibold tracking-wide">
                             Explorer
                         </div>
                         <div className="">
-                            {/* Personal Info Section */}
-                            <div className="py-1">
-                                <div
-                                    className="flex items-center px-2 py-1 cursor-pointer hover:bg-[#2A2D2E]"
-                                    onClick={() => toggleSection("personal-info")}
-                                >
-                                    {expandedSections["personal-info"] ? (
-                                        <ChevronDown size={16} className="text-[#CCCCCC] mr-1" />
-                                    ) : (
-                                        <ChevronRight size={16} className="text-[#CCCCCC] mr-1" />
-                                    )}
-                                    <Folder size={16} className="text-[#E8AB53] mr-1" />
-                                    <span className="text-[#CCCCCC]">personal-info</span>
-                                </div>
+                            <FolderSection
+                                title="personal-info"
+                                isExpanded={expandedSections["personal-info"]}
+                                onToggle={() => toggleSection("personal-info")}
+                            >
+                                <FileItem
+                                    name="profile.json"
+                                    isActive={activeSection === "personal-info" && activeItem === 0}
+                                    onClick={() => handleFileClick("personal-info", 0)}
+                                />
+                            </FolderSection>
+                            <FolderSection
+                                title="work-experience"
+                                isExpanded={expandedSections["work-experience"]}
+                                onToggle={() => toggleSection("work-experience")}
+                            >
+                                {workExperience.map((work, index) => (
+                                    <FileItem
+                                        key={index}
+                                        name={`${work.company.toLowerCase()}.js`}
+                                        isActive={activeSection === "work-experience" && activeItem === index}
+                                        onClick={() => handleFileClick("work-experience", index)}
+                                    />
+                                ))}
+                            </FolderSection>
 
-                                {expandedSections["personal-info"] && (
-                                    <div className="ml-4">
-                                        <div
-                                            className={`flex items-center px-2 py-1 cursor-pointer ${activeSection === "personal-info" && activeItem === 0 ? "bg-[#37373D]" : "hover:bg-[#2A2D2E]"}`}
-                                            onClick={() => handleFileClick("personal-info", 0)}
-                                        >
-                                            <FileText size={16} className="text-[#75BEFF] mr-1" />
-                                            <span className="text-[#CCCCCC]">profile.json</span>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
+                            <FolderSection
+                                title="projects"
+                                isExpanded={expandedSections["projects"]}
+                                onToggle={() => toggleSection("projects")}
+                            >
+                                {projects.map((project, index) => (
+                                    <FileItem
+                                        key={index}
+                                        name={`${project.name.toLowerCase().replace(/\s/g, "-")}.tsx`}
+                                        isActive={activeSection === "projects" && activeItem === index}
+                                        onClick={() => handleFileClick("projects", index)}
+                                    />
+                                ))}
+                            </FolderSection>
 
-                            {/* Work Experience Section */}
-                            <div className="py-1">
-                                <div
-                                    className="flex items-center px-2 py-1 cursor-pointer hover:bg-[#2A2D2E]"
-                                    onClick={() => toggleSection("work-experience")}
-                                >
-                                    {expandedSections["work-experience"] ? (
-                                        <ChevronDown size={16} className="text-[#CCCCCC] mr-1" />
-                                    ) : (
-                                        <ChevronRight size={16} className="text-[#CCCCCC] mr-1" />
-                                    )}
-                                    <Folder size={16} className="text-[#E8AB53] mr-1" />
-                                    <span className="text-[#CCCCCC]">work-experience</span>
-                                </div>
-
-                                {expandedSections["work-experience"] && (
-                                    <div className="ml-4">
-                                        {workExperience.map((work, index) => (
-                                            <div
-                                                key={index}
-                                                className={`flex items-center px-2 py-1 cursor-pointer ${activeSection === "work-experience" && activeItem === index ? "bg-[#37373D]" : "hover:bg-[#2A2D2E]"}`}
-                                                onClick={() => handleFileClick("work-experience", index)}
-                                            >
-                                                <FileText size={16} className="text-[#75BEFF] mr-1" />
-                                                <span className="text-[#CCCCCC]">{work.company.toLowerCase()}.js</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Projects Section */}
-                            <div className="py-1">
-                                <div
-                                    className="flex items-center px-2 py-1 cursor-pointer hover:bg-[#2A2D2E]"
-                                    onClick={() => toggleSection("projects")}
-                                >
-                                    {expandedSections["projects"] ? (
-                                        <ChevronDown size={16} className="text-[#CCCCCC] mr-1" />
-                                    ) : (
-                                        <ChevronRight size={16} className="text-[#CCCCCC] mr-1" />
-                                    )}
-                                    <Folder size={16} className="text-[#E8AB53] mr-1" />
-                                    <span className="text-[#CCCCCC]">projects</span>
-                                </div>
-
-                                {expandedSections["projects"] && (
-                                    <div className="ml-4">
-                                        {projects.map((project, index) => (
-                                            <div
-                                                key={index}
-                                                className={`flex items-center px-2 py-1 cursor-pointer ${activeSection === "projects" && activeItem === index ? "bg-[#37373D]" : "hover:bg-[#2A2D2E]"}`}
-                                                onClick={() => handleFileClick("projects", index)}
-                                            >
-                                                <FileText size={16} className="text-[#75BEFF] mr-1" />
-                                                <span className="text-[#CCCCCC]">{project.name.toLowerCase().replace(/\s/g, "-")}.tsx</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
                         </div>
-                    </aside>
+                    </motion.aside>
 
                     {/* Content wrapper - Allows scrolling on mobile */}
                     <div className="flex-1 flex flex-col lg:flex-row overflow-y-auto">
-                        {/* Center Panel - Dynamic Content */}
                         <section className="flex-1 p-4 lg:p-6">
-                            {activeSection === "personal-info" && (
-                                <pre className="text-base leading-relaxed whitespace-pre-wrap">
-                                    <code>
-                                        <span className="text-[#6B7280]">{"/**"}</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> * About {personalInfo[0].name}</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]">
-                                            {" "}
-                                            * Full-stack developer specializing in React, TypeScript, and Cloud Architecture
-                                        </span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> *</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> * </span>
-                                        <span className="text-[#3B82F6]">[Location]</span>
-                                        <span className="text-[#9CA3AF]"> {personalInfo[0].location}</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> * </span>
-                                        <span className="text-[#3B82F6]">[Education]</span>
-                                        <span className="text-[#9CA3AF]"> {personalInfo[0].education}</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> * </span>
-                                        <span className="text-[#3B82F6]">[Certifications]</span>
-                                        <span className="text-[#9CA3AF]"> {personalInfo[0].certification.join(", ")}</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> * </span>
-                                        <span className="text-[#3B82F6]">[University]</span>
-                                        <span className="text-[#9CA3AF]"> {personalInfo[0].university}</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> * </span>
-                                        <span className="text-[#3B82F6]">[High School]</span>
-                                        <span className="text-[#9CA3AF]"> {personalInfo[0].highSchool}</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> * </span>
-                                        <span className="text-[#3B82F6]">[Age]</span>
-                                        <span className="text-[#9CA3AF]"> {personalInfo[0].age}</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> * </span>
-                                        <span className="text-[#3B82F6]">[Interests]</span>
-                                        <span className="text-[#9CA3AF]"> {personalInfo[0].interests.join(", ")}</span>
-                                        <br />
-                                        <span className="text-[#6B7280]"> */</span>
-                                    </code>
-                                </pre>
-                            )}
+                            <AnimatePresence mode="wait">
+                                {activeSection === "personal-info" && (
+                                    <ContentPanel key="personal-info">
+                                        <CodeBlock>
+                                            <span className="text-[#6B7280]">{"/**"}</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> * About {personalInfo[0].name}</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]">
+                                                {" "}
+                                                * Full-stack developer specializing in React, TypeScript, and Cloud Architecture
+                                            </span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> *</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> * </span>
+                                            <span className="text-[#3B82F6]">[Location]</span>
+                                            <span className="text-[#9CA3AF]"> {personalInfo[0].location}</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> * </span>
+                                            <span className="text-[#3B82F6]">[Education]</span>
+                                            <span className="text-[#9CA3AF]"> {personalInfo[0].education}</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> * </span>
+                                            <span className="text-[#3B82F6]">[Certifications]</span>
+                                            <span className="text-[#9CA3AF]"> {personalInfo[0].certification.join(", ")}</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> * </span>
+                                            <span className="text-[#3B82F6]">[University]</span>
+                                            <span className="text-[#9CA3AF]"> {personalInfo[0].university}</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> * </span>
+                                            <span className="text-[#3B82F6]">[High School]</span>
+                                            <span className="text-[#9CA3AF]"> {personalInfo[0].highSchool}</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> * </span>
+                                            <span className="text-[#3B82F6]">[Age]</span>
+                                            <span className="text-[#9CA3AF]"> {personalInfo[0].age}</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> * </span>
+                                            <span className="text-[#3B82F6]">[Interests]</span>
+                                            <span className="text-[#9CA3AF]"> {personalInfo[0].interests.join(", ")}</span>
+                                            <br />
+                                            <span className="text-[#6B7280]"> */</span>
+                                        </CodeBlock>
+                                    </ContentPanel>
+                                )}
 
-                            {activeSection === "work-experience" && (
-                                <pre className="text-base leading-relaxed whitespace-pre-wrap">
-                                    <code>
-                                        <span className="text-[#6B7280]">{"/**"}</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> * Work Experience: {workExperience[activeItem].company}</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> * Position: {workExperience[activeItem].position}</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> * Duration: {workExperience[activeItem].duration}</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> *</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> * Key Achievements:</span>
-                                        <br />
-                                        {workExperience[activeItem].description.map((desc, index) => (
-                                            <React.Fragment key={index}>
-                                                <span className="text-[#9CA3AF]">
-                                                    {" "}
-                                                    * {index + 1}. {desc}
-                                                </span>
-                                                <br />
-                                            </React.Fragment>
-                                        ))}
-                                        <span className="text-[#6B7280]"> */</span>
-                                    </code>
-                                </pre>
-                            )}
+                                {activeSection === "work-experience" && (
+                                    <ContentPanel key={`work-${activeItem}`}>
+                                        <CodeBlock>
+                                            <span className="text-[#6B7280]">{"/**"}</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> * Work Experience: {workExperience[activeItem].company}</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> * Position: {workExperience[activeItem].position}</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> * Duration: {workExperience[activeItem].duration}</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> *</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> * Key Achievements:</span>
+                                            <br />
+                                            {workExperience[activeItem].description.map((desc, index) => (
+                                                <React.Fragment key={index}>
+                                                    <span className="text-[#9CA3AF]">
+                                                        {" "}
+                                                        * {index + 1}. {desc}
+                                                    </span>
+                                                    <br />
+                                                </React.Fragment>
+                                            ))}
+                                            <span className="text-[#6B7280]"> */</span>
+                                        </CodeBlock>
+                                    </ContentPanel>
+                                )}
 
-                            {activeSection === "projects" && (
-                                <pre className="text-base leading-relaxed whitespace-pre-wrap">
-                                    <code>
-                                        <span className="text-[#6B7280]">{"/**"}</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> * Project: {projects[activeItem].name}</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> *</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> * Description: {projects[activeItem].description}</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> *</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> * Tech Stack: {projects[activeItem].techstack?.join(", ")}</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> *</span>
-                                        <br />
-                                        <span className="text-[#9CA3AF]"> * Link: </span>
-                                        <span className="text-[#3B82F6] hover:underline">
-                                            <a href={projects[activeItem].link}>{projects[activeItem].link}</a>
-                                        </span>
-                                        <br />
-                                        <span className="text-[#6B7280]"> */</span>
-                                    </code>
-                                </pre>
-                            )}
+                                {activeSection === "projects" && (
+                                    <ContentPanel key={`project-${activeItem}`}>
+                                        <CodeBlock>
+                                            <span className="text-[#6B7280]">{"/**"}</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> * Project: {projects[activeItem].name}</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> *</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> * Description: {projects[activeItem].description}</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> *</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> * Tech Stack: {projects[activeItem].techstack?.join(", ")}</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> *</span>
+                                            <br />
+                                            <span className="text-[#9CA3AF]"> * Link: </span>
+                                            <span className="text-[#3B82F6] hover:underline">
+                                                <a href={projects[activeItem].link}>{projects[activeItem].link}</a>
+                                            </span>
+                                            <br />
+                                            <span className="text-[#6B7280]"> */</span>
+                                        </CodeBlock>
+                                    </ContentPanel>
+                                )}
+                            </AnimatePresence>
                         </section>
 
                         {/* Right Panel - Skills & Details */}
                         <aside className="w-full lg:w-[350px] p-4 lg:p-6 border-t lg:border-t-0 lg:border-l border-gray-800 flex flex-col gap-6">
-                            {/* First Card - Skills/Technologies */}
-                            {activeSection === "work-experience" && (
-                                <div className="rounded-xl border border-[#374151] p-4">
-                                    <div className="flex items-start justify-start text-start mb-4">
-                                        <span className="text-white text-start">
-                                            @{workExperience[activeItem].company} • {workExperience[activeItem].duration}
-                                        </span>
-                                    </div>
-                                    <h3 className="text-[#6B7280] mb-3">Technologies & Skills</h3>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                        {workExperience[activeItem].skills?.map((skill, index) => (
-                                            <div key={index} className="flex items-center justify-center sm:justify-start">
-                                                <Check size={16} className="text-[#10B981] mr-2 flex-shrink-0" />
-                                                <span className="text-[#10B981]">{skill}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
+                            <AnimatePresence mode="wait">
+                                {activeSection === "work-experience" && (
+                                    <SkillCard
+                                        key={`work-card-${activeItem}`}
+                                        title={`@${workExperience[activeItem].company} • ${workExperience[activeItem].duration}`}
+                                        subtitle="Technologies & Skills"
+                                        items={workExperience[activeItem].skills}
+                                    />
+                                )}
 
-                            {activeSection === "projects" && (
-                                <div className="rounded-xl border border-[#374151] p-4">
-                                    <div className="flex items-start justify-start mb-4">
-                                        <span className="text-white">{projects[activeItem].name}</span>
-                                    </div>
-                                    <h3 className="text-[#6B7280] mb-3">Technologies Used</h3>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                        {projects[activeItem].techstack?.map((tech, index) => (
-                                            <div key={index} className="flex items-center justify-center sm:justify-start">
-                                                <Check size={16} className="text-[#10B981] mr-2 flex-shrink-0" />
-                                                <span className="text-[#10B981]">{tech}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    {projects[activeItem].link !== "NA" && (
-                                        <div className="mt-4">
-                                            <a
-                                                href={projects[activeItem].link}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-[#3B82F6] hover:underline"
-                                                style={{
-                                                    background: "linear-gradient(90deg, #72009C 0%, #72009C 50%, white 50%, white 100%)",
-                                                    backgroundSize: "200% 100%",
-                                                    WebkitBackgroundClip: "text",
-                                                    backgroundClip: "text",
-                                                    WebkitTextFillColor: "transparent",
-                                                    transition: "background-position 0.5s ease-out"
-                                                }}
-                                                onMouseEnter={(e) => { e.currentTarget.style.backgroundPosition = "0% 0" }}
-                                                onMouseLeave={(e) => { e.currentTarget.style.backgroundPosition = "100% 0" }}
-                                            >
-                                                View Project →
-                                            </a>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
+                                {activeSection === "projects" && (
+                                    <ProjectCard
+                                        key={`project-card-${activeItem}`}
+                                        project={projects[activeItem]}
+                                    />
+                                )}
 
-                            {activeSection === "personal-info" && (
-                                <div className="rounded-xl border border-[#374151] p-4">
-                                    <div className="flex items-center mb-4">
-                                        <span className="text-white mr-2">@anirudh</span>
-                                        <span className="text-white text-xs ml-auto">• {personalInfo[0].location}</span>
-                                    </div>
-                                    <h3 className="text-[#6B7280] mb-3">Interests</h3>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                        {personalInfo[0].interests.map((interest, index) => (
-                                            <div key={index} className="flex items-center justify-center sm:justify-start">
-                                                <Check size={16} className="text-[#10B981] mr-2 flex-shrink-0" />
-                                                <span className="text-[#10B981]">{interest}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
+                                {activeSection === "personal-info" && (
+                                    <SkillCard
+                                        key="personal-card"
+                                        title={`@anirudh • ${personalInfo[0].location}`}
+                                        subtitle="Interests"
+                                        items={personalInfo[0].interests}
+                                    />
+                                )}
+                            </AnimatePresence>
                         </aside>
                     </div>
                 </main>
             </div>
-        </motion.div>
+        </motion.div >
     )
 }
 

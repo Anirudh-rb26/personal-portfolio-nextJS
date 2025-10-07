@@ -1,29 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
-interface TypingAnimationProps {
-  text: string;
-  duration?: number;
-  className?: string;
-  cursorClassName?: string;
-  onComplete?: () => void;
-}
-
-export function TypingAnimation({
-  text,
-  duration = 200,
-  className,
-  cursorClassName,
-  onComplete,
-}: TypingAnimationProps) {
+export function TypingAnimation({ text, onComplete }: { text: string, onComplete: () => void }) {
   const [displayedText, setDisplayedText] = useState<string>("");
   const [i, setI] = useState<number>(0);
 
   useEffect(() => {
-    // Reset when text changes
     setDisplayedText("");
     setI(0);
   }, [text]);
@@ -39,53 +23,59 @@ export function TypingAnimation({
           onComplete();
         }
       }
-    }, duration);
+    }, 100);
 
     return () => {
       clearInterval(typingEffect);
     };
-  }, [duration, i, text, onComplete]);
-
-  // Split the displayed text into characters for individual animation
-  const characters = displayedText.split("").map((char, index) => (
-    <motion.span
-      key={`char-${index}`}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{
-        duration: 0.1,
-        ease: "easeInOut"
-      }}
-      className={cn("dark:text-white text-black", className)}
-    >
-      {char}
-    </motion.span>
-  ));
+  }, [i, text, onComplete]);
 
   return (
-    <div
-      className={"text-base sm:text-xl md:text-3xl lg:text-5xl font-bold text-center"}
-    >
-      <span className="">
-        {characters}
-      </span>
-      <motion.span
-        initial={{
-          opacity: 0,
-        }}
+    <div className="relative">
+      {/* Subtle glow effect behind text */}
+      <motion.div
+        className="absolute inset-0 blur-xl opacity-30"
         animate={{
-          opacity: 1,
+          background: [
+            "radial-gradient(circle, #72009C00 0%, #72009C00 100%)",
+            "radial-gradient(circle, #72009C60 0%, #72009C00 70%)",
+            "radial-gradient(circle, #72009C00 0%, #72009C00 100%)",
+          ]
         }}
         transition={{
-          duration: 1.6,
+          duration: 2,
           repeat: Infinity,
-          repeatType: "reverse",
+          ease: "easeInOut"
         }}
-        className={cn(
-          "inline-block rounded-sm w-[2px] h-2 md:h-4 lg:h-6 bg-[#3B82F6] ml-1",
-          cursorClassName
-        )}
       />
+
+      <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold relative z-10">
+        {displayedText.split("").map((char, index) => (
+          <motion.span
+            key={`${text}-${index}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.1 }}
+            className="text-[#72009C]"
+          >
+            {char}
+          </motion.span>
+        ))}
+
+        {/* Cursor */}
+        <motion.span
+          className="relative inline-block ml-1"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            duration: 0.8,
+            repeat: Infinity,
+            repeatType: "reverse",
+          }}
+        >
+          <span className="relative inline-block w-[2px] h-4 sm:h-5 md:h-6 lg:h-7 bg-[#72009C]" />
+        </motion.span>
+      </div>
     </div>
   );
 }
