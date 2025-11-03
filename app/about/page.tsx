@@ -50,6 +50,13 @@ const workExperience = [
 
 const projects = [
     {
+        name: "Canvas",
+        description: "Built a live React component editor enabling users to paste component snippets (with local state management via useState), render components in isolated iFrames, and edit visually via element selection. Live code generation with syntax updates and version-controlled saves to Supabase backend. Supports dynamic component rendering with live state synchronization across edits.",
+        techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "Node.js", "Framer Motion", "Babel", "Supabase"],
+        link: "https://canvas-dun-one.vercel.app/",
+
+    },
+    {
         name: "Qpi Ai Pro",
         description: "Qpi AI Pro's landing site.",
         techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "Node.js", "Framer Motion"],
