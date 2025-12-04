@@ -4,7 +4,7 @@ import Folder from "./folder"
 import { ShootingStars } from "../ui/shooting-stars"
 import { StarsBackground } from "../ui/stars-background"
 import React, { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, Variants } from "framer-motion"
 
 const projects = [
     {
@@ -65,7 +65,7 @@ const projects = [
     },
 ]
 
-const pageVariants = {
+const pageVariants: Variants = {
     enter: (direction: number) => ({
         x: direction > 0 ? "100%" : "-100%",
         opacity: 0,
@@ -131,7 +131,7 @@ export default function ProjectGrid() {
     }, [itemsPerPage])
 
     return (
-        <section className="relative w-full min-h-screen flex flex-col items-center justify-center px-4 sm:px-8 lg:px-16 xl:px-24 py-20">
+        <section className="relative w-screen min-h-screen flex flex-col items-center justify-center px-4 sm:px-8 lg:px-16 xl:px-24 py-20">
             <div className="absolute inset-0 -z-10 bg-black">
                 <StarsBackground />
                 <ShootingStars />
@@ -151,19 +151,20 @@ export default function ProjectGrid() {
             </motion.div>
 
             <div className="w-full max-w-[1800px] relative z-10">
-                <div className="relative w-full h-[600px] sm:h-[700px] lg:h-[520px]">
-                    {/* Left Navigation - Overlay Style */}
+                {/* Mobile: auto height, Desktop: fixed height */}
+                <div className="relative w-full lg:h-[520px]">
+                    {/* Left Navigation - Overlay Style (Desktop Only) */}
                     <div className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-20">
                         <NavButton onClick={handlePrev} icon="←" />
                     </div>
 
-                    {/* Right Navigation - Overlay Style */}
+                    {/* Right Navigation - Overlay Style (Desktop Only) */}
                     <div className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-20">
                         <NavButton onClick={handleNext} icon="→" />
                     </div>
 
-                    {/* Bottom Center Indicators - Overlay Style */}
-                    <div className="hidden lg:flex absolute bottom-6 left-1/2 -translate-x-1/2 z-20 items-center gap-3 px-6 py-3 rounded-full bg-black/40 backdrop-blur-xl border border-white/10">
+                    {/* Bottom Center Indicators - Overlay Style (Desktop Only) */}
+                    <div className="hidden lg:flex absolute bottom-6 left-1/2 -translate-x-1/2 z-20 items-center gap-3 px-6 py-3 rounded-full bg-transparent backdrop-blur-xl border border-white/10">
                         {Array.from({ length: totalPages }).map((_, i) => (
                             <motion.button
                                 key={i}
@@ -190,9 +191,10 @@ export default function ProjectGrid() {
                             initial="enter"
                             animate="center"
                             exit="exit"
-                            className="absolute inset-0"
+                            className="w-full lg:absolute lg:inset-0"
                         >
-                            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 h-full">
+                            {/* Mobile: auto rows with min-height, Desktop: full height grid */}
+                            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-8 lg:h-full auto-rows-fr lg:auto-rows-auto">
                                 {currentPageItems.map((project, index) => {
                                     if (!project) {
                                         return <div key={`empty-${index}`} className="invisible" />
@@ -200,7 +202,7 @@ export default function ProjectGrid() {
                                     return (
                                         <motion.div
                                             key={project.name}
-                                            className="w-full h-full"
+                                            className="w-full min-h-[220px] sm:min-h-[240px] lg:h-full lg:min-h-0"
                                             initial={{ opacity: 0, scale: 0.95 }}
                                             animate={{ opacity: 1, scale: 1 }}
                                             transition={{ delay: index * 0.05 }}
@@ -222,11 +224,11 @@ export default function ProjectGrid() {
                     </AnimatePresence>
                 </div>
 
-                {/* Mobile Navigation - Below Grid */}
-                <div className="lg:hidden flex items-center justify-between w-full mt-8">
+                {/* Mobile Navigation - Below Grid with tighter spacing */}
+                <div className="lg:hidden flex items-center justify-between w-full mt-6">
                     <NavButton onClick={handlePrev} icon="←" />
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 bg-frosted-mint/10 backdrop-blur-xl border border-white/10 py-2 px-4 rounded-4xl">
                         {Array.from({ length: totalPages }).map((_, i) => (
                             <motion.button
                                 key={i}
@@ -234,7 +236,7 @@ export default function ProjectGrid() {
                                     setDirection(i > page ? 1 : -1)
                                     setPage(i)
                                 }}
-                                className="h-2 rounded-full transition-colors hover:bg-white/40"
+                                className="h-2 rounded-full transition-colors hover:bg-white/40 "
                                 animate={{
                                     width: page === i ? 24 : 6,
                                     backgroundColor: page === i ? "#ec48a0" : "rgba(255,255,255,0.2)",
@@ -257,7 +259,7 @@ function NavButton({ onClick, icon }: { onClick: () => void; icon: string }) {
             onClick={onClick}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            className="h-14 w-14 rounded-full bg-white/10 border border-white/10 text-white backdrop-blur-md hover:bg-white/20 transition-colors flex items-center justify-center text-xl shadow-lg shadow-black/20"
+            className="h-12 w-12 lg:h-14 lg:w-14 rounded-full bg-white/10 border border-white/10 text-white backdrop-blur-md hover:bg-white/20 transition-colors flex items-center justify-center text-xl shadow-lg shadow-black/20"
         >
             {icon}
         </motion.button>

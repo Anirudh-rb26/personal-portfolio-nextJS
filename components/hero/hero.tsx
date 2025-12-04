@@ -19,10 +19,14 @@ const Hero = () => {
     const blendAnimationControls = useAnimation()
 
     return (
-        <section className="relative w-screen min-h-[90vh] flex items-center justify-center px-4">
-            <div className="w-screen h-screen absolute inset-0 z-0 overflow-hidden">
+        <section className="relative w-screen min-h-[85dvh] md:min-h-[98vh] flex items-center justify-center px-4 overflow-hidden">
+
+            {/* CHANGED: h-screen -> h-full. 
+               This ensures the background matches the section height exactly on all devices. 
+               (On desktop, this equals 90vh, creating the same visual effect as your original code). */}
+            <div className="absolute inset-0 w-screen h-screen z-0 overflow-hidden">
                 <ColorBends
-                    className="z-[-1] w-screen h-screen"
+                    className="z-[-1] w-screen h-full"
                     // colors={["#72009c", "#456990", "#f45b69"]}
                     colors={["#456990", "#72009c"]}
                     rotation={0}
@@ -35,6 +39,7 @@ const Hero = () => {
                     noise={0.01}
                     transparent />
             </div>
+
             <div className="hidden sm:block z-10">
                 <p className="pointer-events-none select-none absolute top-6 left-6 text-[9px] sm:text-[10px] font-melodrama uppercase tracking-[0.2em] text-white/30">
                     {heroLabels[0]}
