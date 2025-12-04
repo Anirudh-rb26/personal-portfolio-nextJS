@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { useState, useEffect, useRef } from "react"
+import { useLenis } from "lenis/react"
 
 export default function Navbar() {
     const measureRef = useRef<HTMLDivElement>(null)
@@ -13,8 +14,22 @@ export default function Navbar() {
     const [isInitialLoad, setIsInitialLoad] = useState(true)
     const [fileLocation, setFileLocation] = useState<string | null>(null)
 
-    const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
     const closeMenu = () => setIsMenuOpen(false)
+    const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+
+    const lenis = useLenis();
+    const handleScroll = (e: React.MouseEvent, targetId: string, locationName: string | null) => {
+        e.preventDefault();
+        setFileLocation(locationName);
+
+        if (locationName === null) {
+            lenis?.scrollTo(0, { duration: 1.5 });
+        } else {
+            lenis?.scrollTo(targetId, { offset: -20, duration: 1.5 })
+        }
+
+        closeMenu();
+    }
 
     const nameText = "Anirudh"
 
@@ -64,7 +79,7 @@ export default function Navbar() {
 
     return (
         <motion.nav
-            className="fixed top-4 z-10"
+            className="fixed top-4 z-50"
             initial={{ y: -40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
@@ -89,7 +104,6 @@ export default function Navbar() {
                     <span className="ml-1 inline-block h-4 w-2 bg-white" />
                 </div>
                 <div className="hidden md:flex items-center gap-2 text-xs sm:text-sm">
-                    <div className="px-3 py-1.5 rounded-full">home()</div>
                     <div className="px-3 py-1.5 rounded-full">info.me()</div>
                     <div className="px-3 py-1.5 rounded-full">contact.me()</div>
                 </div>
@@ -137,7 +151,7 @@ export default function Navbar() {
                         <Link
                             href="/"
                             className="text-dark-amethyst font-semibold hover:text-frosted-mint transition-colors cursor-pointer"
-                            onClick={() => setFileLocation(null)}
+                            onClick={(e) => handleScroll(e, '#home', '')}
                         >
                             {nameText}
                         </Link>
@@ -168,11 +182,11 @@ export default function Navbar() {
                         transition={{ delay: 0.35, duration: 0.4 }}
                     >
                         <Link
-                            href="#about"
+                            href="#projects"
                             className="px-3 py-1.5 rounded-full text-gray-300 hover:text-white hover:bg-frosted-mint/20 transition-colors"
-                            onClick={() => setFileLocation("information")}
+                            onClick={(e) => handleScroll(e, '#projects', 'projects')}
                         >
-                            /information
+                            /projects
                         </Link>
                     </motion.div>
 
@@ -184,7 +198,7 @@ export default function Navbar() {
                         <Link
                             href="#contact"
                             className="px-3 py-1.5 rounded-full text-gray-300 hover:text-white hover:bg-frosted-mint/20 transition-colors"
-                            onClick={() => setFileLocation("contact")}
+                            onClick={(e) => handleScroll(e, '#contact', 'contact')}
                         >
                             /contact
                         </Link>
@@ -243,34 +257,18 @@ export default function Navbar() {
                     }}
                 >
                     <Link
-                        href="/"
+                        href="#projects"
                         className="block px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-colors text-sm"
-                        onClick={() => {
-                            setFileLocation(null)
-                            closeMenu()
-                        }}
+                        onClick={(e) => handleScroll(e, '#projects', 'projects')}
                     >
-                        home()
-                    </Link>
-                    <Link
-                        href="#about"
-                        className="block px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-colors text-sm"
-                        onClick={() => {
-                            setFileLocation("information")
-                            closeMenu()
-                        }}
-                    >
-                        info.me()
+                        projects
                     </Link>
                     <Link
                         href="#contact"
                         className="block px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-colors text-sm"
-                        onClick={() => {
-                            setFileLocation("contact")
-                            closeMenu()
-                        }}
+                        onClick={(e) => handleScroll(e, '#contacts', 'contact')}
                     >
-                        contact.me()
+                        contact
                     </Link>
                 </div>
             </motion.div>

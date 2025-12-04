@@ -5,6 +5,7 @@ import { Button } from "../ui/button"
 import { useAnimation } from "framer-motion"
 import { Blend } from "../animated-icons/blend"
 import { Rocket } from "../animated-icons/rocket"
+import ColorBends from "../ColorBends"
 
 const heroLabels = [
     "V 3.0",
@@ -19,7 +20,22 @@ const Hero = () => {
 
     return (
         <section className="relative w-screen min-h-[90vh] flex items-center justify-center px-4">
-            <div className="hidden sm:block">
+            <div className="w-screen h-screen absolute inset-0 z-0 overflow-hidden">
+                <ColorBends
+                    className="z-[-1] w-screen h-screen"
+                    // colors={["#72009c", "#456990", "#f45b69"]}
+                    colors={["#456990", "#72009c"]}
+                    rotation={0}
+                    speed={0.2}
+                    scale={0.5}
+                    frequency={1}
+                    warpStrength={0}
+                    mouseInfluence={0}
+                    parallax={0.9}
+                    noise={0.01}
+                    transparent />
+            </div>
+            <div className="hidden sm:block z-10">
                 <p className="pointer-events-none select-none absolute top-6 left-6 text-[9px] sm:text-[10px] font-melodrama uppercase tracking-[0.2em] text-white/30">
                     {heroLabels[0]}
                 </p>
@@ -38,7 +54,7 @@ const Hero = () => {
             </div>
 
             {/* main hero */}
-            <div className="max-w-3xl text-center flex flex-col items-center justify-center">
+            <div className="max-w-3xl text-center flex flex-col items-center justify-center z-10">
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-tight">
                     <span className="font-melodrama italic">Turning ideas into</span>{" "}
                     <span className="font-clash">products</span>{" "}
