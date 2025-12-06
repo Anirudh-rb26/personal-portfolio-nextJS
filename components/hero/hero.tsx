@@ -19,7 +19,7 @@ const Hero = () => {
     const blendAnimationControls = useAnimation()
 
     return (
-        <section className="relative w-screen min-h-[85dvh] md:min-h-[98vh] flex items-center justify-center px-4 overflow-hidden">
+        <section className="relative w-screen min-h-[95dvh] md:min-h-[98vh] flex items-center justify-center px-4 overflow-hidden">
 
             {/* CHANGED: h-screen -> h-full. 
                This ensures the background matches the section height exactly on all devices. 

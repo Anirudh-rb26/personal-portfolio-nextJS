@@ -1,56 +1,55 @@
 "use client"
 
-import React, { SetStateAction, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, Variants } from 'framer-motion'
-import { ExternalLink, Github } from 'lucide-react'
-import Link from 'next/link';
+import { LinkPreview } from '../ui/link-preview'
+import { ArrowUpRight, Github, X } from 'lucide-react'
+import React, { SetStateAction, useEffect, useState } from 'react'
+import { Button } from '../ui/button'
 
 interface ExpandedCardProps {
     name: string;
+    index: string;
     github?: string;
     deployment?: string;
     techstack: string[];
     description: string;
+    projectType: string;
     expandedCardVariants: Variants;
-    techStackContainerVariants: Variants;
-    techStackItemVariants: Variants;
+    techStackItemVariants?: Variants;
+    techStackContainerVariants?: Variants;
     setIsOpen: React.Dispatch<SetStateAction<boolean>>
 }
 
 const ExpandedCard = ({
     name,
+    index,
     github,
-    deployment,
     techstack,
+    setIsOpen,
+    deployment,
+    projectType,
     description,
     expandedCardVariants,
-    techStackContainerVariants,
-    techStackItemVariants,
-    setIsOpen
 }: ExpandedCardProps) => {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         setMounted(true);
-        // You can move the body scroll lock here if you prefer, 
-        // but keeping it in Folder.tsx is also fine.
     }, []);
 
-    // Don't render anything on the server or before mounting
     if (!mounted) return null;
 
-    // Portal moves this HTML to the <body> tag, outside the grid's stacking context
     return createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center px-4">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center px-4 sm:px-8">
 
-            {/* Backdrop */}
+            {/* --- Dark Cinematic Backdrop --- */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setIsOpen(false)}
-                className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                className="absolute inset-0 bg-[#050505]/80 backdrop-blur-md"
             />
 
             <motion.div
@@ -58,59 +57,107 @@ const ExpandedCard = ({
                 initial="closed"
                 animate="open"
                 exit="closed"
-                className="relative w-full max-w-sm sm:max-w-xl md:max-w-2xl lg:max-w-4xl bg-[#0a0a0a] border border-frosted-mint/20 rounded-2xl shadow-2xl overflow-hidden z-10"
+
+                className="group relative w-full max-w-4xl overflow-hidden bg-[#111] text-[#f0f0f0] shadow-2xl"
+                style={{
+                    borderRadius: '32px',
+                    border: '1px solid rgba(255,255,255,0.08)'
+                }}
             >
-                {/* Mac Header */}
-                <div className="h-8 sm:h-10 bg-[#1a1a1a] border-b border-white/5 flex items-center px-3 sm:px-4 space-x-2">
-                    <div onClick={() => setIsOpen(false)} className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#FF5F56] cursor-pointer hover:brightness-110" />
-                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#FFBD2E]" />
-                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#27C93F]" />
-                    <div className="ml-auto text-[9px] sm:text-[10px] text-white/30 font-mono truncate max-w-[120px] sm:max-w-none">{name} ~ project-view</div>
-                </div>
 
-                {/* Content */}
-                <div className="p-4 sm:p-6 md:p-8 max-h-[70vh] sm:max-h-[75vh] md:max-h-[80vh] overflow-y-auto">
-                    <h2 className="text-xl sm:text-2xl font-clash font-bold text-white mb-2">{name}</h2>
-                    <p className="text-sm sm:text-base text-white/70 font-satoshi leading-relaxed mb-4 sm:mb-6">{description}</p>
+                {/* --- Ambient Glow Effect --- */}
+                <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-dark-amethyst/20 blur-[80px] pointer-events-none" />
+                <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-baltic-blue/50 blur-[80px] pointer-events-none" />
+                <Button
+                    onClick={() => setIsOpen(false)}
+                    className="absolute top-4 right-4 md:top-6 md:right-6 p-2 rounded-full border border-white/10 hover:bg-white text-white hover:text-black transition-colors duration-300 z-50">
+                    <X size={20} />
+                </Button>
 
-                    {/* Tech Stack */}
-                    <div className="mb-4 sm:mb-6">
-                        <h4 className="text-[10px] sm:text-xs font-mono text-frosted-mint mb-2 sm:mb-3 uppercase tracking-wider">Tech Stack</h4>
-                        <motion.div
-                            variants={techStackContainerVariants}
-                            initial="hidden"
-                            animate="visible"
-                            className="flex flex-wrap gap-1.5 sm:gap-2"
-                        >
-                            {techstack.map((tech) => (
-                                <motion.span
-                                    key={tech}
-                                    variants={techStackItemVariants}
-                                    className="px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-white/5 border border-white/10 text-[10px] sm:text-xs text-white/80 font-array"
-                                >
-                                    {tech}
-                                </motion.span>
-                            ))}
-                        </motion.div>
+                {/* --- Content Wrapper --- */}
+                <div className="relative z-10 flex flex-col md:flex-row h-auto md:h-[600px]">
+
+                    {/* Left Col: Title & Texture */}
+                    <div className="relative w-full md:w-5/12 p-8 md:p-10 flex flex-col justify-between border-b md:border-b-0 md:border-r border-white/5 bg-gradient-to-b from-white/[0.02] to-transparent">
+
+                        {/* Meta Header */}
+                        <div className="flex items-center space-x-2 opacity-50">
+                            <span className="h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse" />
+                            <span className="text-[10px] font-mono uppercase tracking-widest">Project Details</span>
+                        </div>
+
+                        {/* Massive Title */}
+                        <div className="mt-8 md:mt-0">
+                            <h2 className="text-5xl md:text-7xl font-serif italic font-light tracking-tight leading-[0.9] text-white/90">
+                                {name}
+                            </h2>
+                        </div>
+
+                        {/* Tech Stack - Vertical List for Style */}
+                        <div className="hidden md:block">
+                            <p className="text-[10px] font-mono uppercase tracking-widest opacity-40 mb-4">Technologies</p>
+                            <div className="flex flex-wrap gap-2">
+                                {techstack.slice(0, 5).map((tech) => (
+                                    <span key={tech} className="text-xs border border-white/10 px-3 py-1 rounded-full text-white/60 font-clash">
+                                        {tech}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
                     </div>
 
-                    {/* Links */}
-                    <div className="flex gap-3 sm:gap-4 pt-3 sm:pt-4 border-t border-white/5">
-                        {github && (
-                            <Link href={github} target="_blank" className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-white/60 hover:text-white transition-colors">
-                                <Github size={14} className="sm:w-4 sm:h-4" /> Code
-                            </Link>
-                        )}
-                        {deployment && (
-                            <Link href={deployment} target="_blank" className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-frosted-mint/80 hover:text-frosted-mint transition-colors">
-                                <ExternalLink size={14} className="sm:w-4 sm:h-4" /> Live Demo
-                            </Link>
-                        )}
+                    {/* Right Col: Description & Actions */}
+                    <div className="w-full md:w-7/12 p-8 md:p-10 flex flex-col relative">
+
+                        <div className="flex-grow overflow-y-auto custom-scrollbar pr-2">
+                            {/* Mobile Tech Stack (Visible only on small screens) */}
+                            <div className="md:hidden flex flex-wrap gap-2 mb-8">
+                                {techstack.map((tech) => (
+                                    <span key={tech} className="text-[10px] uppercase tracking-wider border border-white/10 px-2 py-1 rounded-sm text-white/60">
+                                        {tech}
+                                    </span>
+                                ))}
+                            </div>
+
+                            <p className="text-lg md:text-xl font-light leading-relaxed text-white/80 font-satoshi">
+                                {description}
+                            </p>
+
+                            <div className="mt-12 space-y-6">
+                                {deployment && (
+                                    <LinkPreview url={deployment} className="block group/link">
+                                        <div className="flex items-center justify-between border-b border-white/10 pb-4 hover:border-white/40 transition-colors duration-500">
+                                            <span className="text-2xl font-melodrama italic text-white/90 group-hover/link:translate-x-2 transition-transform duration-500">
+                                                Live Deployment
+                                            </span>
+                                            <ArrowUpRight className="text-white/40 group-hover/link:rotate-45 transition-transform duration-500" />
+                                        </div>
+                                    </LinkPreview>
+                                )}
+
+                                {github && (
+                                    <LinkPreview url={github} className="block group/link">
+                                        <div className="flex items-center justify-between border-b border-white/10 pb-4 hover:border-white/40 transition-colors duration-500">
+                                            <span className="text-2xl font-melodrama italic text-white/90 group-hover/link:translate-x-2 transition-transform duration-500">
+                                                Github Repository
+                                            </span>
+                                            <Github className="text-white/40 group-hover/link:text-white transition-colors duration-500" />
+                                        </div>
+                                    </LinkPreview>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Footer Numbering decoration */}
+                        <div className="mt-auto pt-8 flex justify-between items-end opacity-20">
+                            <div className="font-jetbrains text-xs">{projectType}</div>
+                            <div className="text-6xl font-clash font-bold leading-none tracking-tighter">{index}</div>
+                        </div>
                     </div>
                 </div>
             </motion.div>
         </div>,
-        document.body // Target container
+        document.body
     )
 }
 

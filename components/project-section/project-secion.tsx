@@ -14,54 +14,90 @@ const projects = [
         techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "Node.js", "Framer Motion", "Supabase"],
         github: "https://canvas-dun-one.vercel.app/",
         deployment: "https://canvas-dun-one.vercel.app/",
+        projectType: "./Project / Learning",
+        privacy: "public",
+        version: "V 1.23",
+        type: "web",
     },
     {
         name: "Qpi Ai Pro",
         description: "Qpi AI Pro's landing site.",
         techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "Node.js", "Framer Motion"],
         link: "https://qpiai-pro.tech",
+        projectType: "./Project / Professional",
+        privacy: "public",
+        version: "V 1.0",
+        type: "web",
     },
     {
         name: "Review Co-Pilot",
         description: "AI-powered review analytics platform using FastAPI and Next.js — leveraging NLTK sentiment analysis, TF-IDF similarity search, and Gemini LLM responses.",
         techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "FastAPI", "Scikit", "NLTK", "Gemini"],
         link: "https://review-copilot-frontend.vercel.app/",
+        projectType: "./Project / Experimental",
+        privacy: "public",
+        version: "V 1.0",
+        type: "web",
     },
     {
         name: "Convoflow",
         description: "Real-time AI chat system that combines LiveKit's real-time communication capabilities with memory-enhanced contextual conversations using Mem0.",
         techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "FastAPI", "LiveKit", "Mem0", "Gemini"],
         link: "https://github.com/Anirudh-rb26/ConvoFlow",
+        projectType: "./Project / Experimental",
+        privacy: "public",
+        version: "V 1.0",
+        type: "web",
     },
     {
         name: "AI Interview Bot",
         description: "An intelligent interviewing platform that conducts automated interviews based on resumes and job descriptions.",
         techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "Node.js", "Google AI Studio", "Supabase"],
         link: "https://github.com/Anirudh-rb26/ai-interviewer",
+        projectType: "./Project / Experimental",
+        privacy: "public",
+        version: "V 1.0",
+        type: "web",
     },
     {
         name: "Interview Question Generator",
         description: "AI-powered tool that generates customized interview questions based on job role, description, and experience level",
         techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "Node.js", "Google AI Studio"],
         link: "https://interview-question-generator-five.vercel.app/",
+        projectType: "./Project / Experimental",
+        privacy: "public",
+        version: "V 1.0",
+        type: "web",
     },
     {
         name: "DepthText",
         description: "Computer vision app that adds text behind subjects in images using Mobile-SAM for segmentation",
         techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "Node.js", "Mobile-SAM", "ONNX"],
         link: "In Progress",
+        projectType: "./Project / Experimental",
+        privacy: "private", // Assuming 'In Progress' means it's not publicly deployed/available yet
+        version: "V 1.0",
+        type: "web",
     },
     {
         name: "Airbnb Clone",
         description: "Full-stack Airbnb clone with property listings, booking, and user authentication",
         techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "Node.js", "Supabase", "Prisma", "Kinde"],
         link: "https://airbnb-clone-3h68.vercel.app/",
+        projectType: "./Project / Learning",
+        privacy: "public",
+        version: "V 1.0",
+        type: "web",
     },
     {
         name: "Zoom Clone",
         description: "Video conferencing application with real-time communication features",
         techstack: ["React", "WebRTC", "Socket.io"],
         link: "https://zoom-clone-ike9.vercel.app/",
+        projectType: "./Project / Learning",
+        privacy: "public",
+        version: "V 1.0",
+        type: "web",
     },
 ]
 
@@ -74,7 +110,7 @@ const pageVariants: Variants = {
         x: 0,
         opacity: 1,
         transition: {
-            x: { type: "spring", stiffness: 300, damping: 30 },
+            x: { type: "tween", duration: 0.4, ease: [0.22, 1, 0.36, 1] }, // Custom easing curve
             opacity: { duration: 0.2 },
         },
     },
@@ -82,7 +118,7 @@ const pageVariants: Variants = {
         x: direction > 0 ? "-100%" : "100%",
         opacity: 0,
         transition: {
-            x: { type: "spring", stiffness: 300, damping: 30 },
+            x: { type: "tween", duration: 0.4, ease: [0.22, 1, 0.36, 1] },
             opacity: { duration: 0.2 },
         },
     }),
@@ -211,9 +247,14 @@ export default function ProjectGrid() {
                                         >
                                             <Folder
                                                 name={project.name}
-                                                description={project.description}
+                                                type={project.type}
+                                                version={project.version}
+                                                privacy={project.privacy}
                                                 techstack={project.techstack}
+                                                description={project.description}
+                                                projectType={project.projectType}
                                                 github={project.github || project.link}
+                                                index={String(index + 1).padStart(3, '0')}
                                                 deployment={project.deployment || project.link}
                                             />
                                         </motion.div>
@@ -241,7 +282,7 @@ export default function ProjectGrid() {
                                     width: page === i ? 24 : 6,
                                     backgroundColor: page === i ? "#ec48a0" : "rgba(255,255,255,0.2)",
                                 }}
-                                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                                transition={{ type: "spring", stiffness: 900, damping: 200 }}
                             />
                         ))}
                     </div>
@@ -259,9 +300,13 @@ function NavButton({ onClick, icon }: { onClick: () => void; icon: string }) {
             onClick={onClick}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            className="h-12 w-12 lg:h-14 lg:w-14 rounded-full bg-white/10 border border-white/10 text-white backdrop-blur-md hover:bg-white/20 transition-colors flex items-center justify-center text-xl shadow-lg shadow-black/20"
+            className="relative h-12 w-12 lg:h-14 lg:w-14 rounded-full bg-black/80 border border-white/20 text-white backdrop-blur-md hover:bg-black/60 transition-colors flex items-center justify-center text-xl shadow-[0_0_15px_rgba(114,0,156,0.3)] overflow-hidden"
         >
-            {icon}
+            {/* Holographic mesh gradient background */}
+            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_50%,_#72009c_0%,_transparent_70%)]" />
+            {/* <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.05)_50%,transparent_75%)] bg-[length:250%_250%] animate-shine" /> */}
+
+            <span className="relative z-10">{icon}</span>
         </motion.button>
     )
 }
