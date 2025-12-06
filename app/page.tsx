@@ -1,5 +1,6 @@
 import Hero from "@/components/hero/hero";
-import ProjectGrid from "@/components/project-section/project-secion";
+import ContactPage from "@/components/contact/page";
+import ProjectGrid from "@/components/project-section/project-section";
 
 
 export default function Home() {
@@ -14,7 +15,7 @@ export default function Home() {
       </div>
 
       <div id="contact">
-        <div className="h-screen w-screen flex items-center justify-center bg-baltic-blue">Contact Section</div>
+        <ContactPage />
       </div>
     </div>
   );
