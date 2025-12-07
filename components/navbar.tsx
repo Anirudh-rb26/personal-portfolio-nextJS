@@ -261,14 +261,14 @@ export default function Navbar() {
                         className="block px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-colors text-sm"
                         onClick={(e) => handleScroll(e, '#projects', 'projects')}
                     >
-                        projects
+                        /projects
                     </Link>
                     <Link
                         href="#contact"
                         className="block px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-colors text-sm"
-                        onClick={(e) => handleScroll(e, '#contacts', 'contact')}
+                        onClick={(e) => handleScroll(e, '#contact', 'contact')}
                     >
-                        contact
+                        /contact
                     </Link>
                 </div>
             </motion.div>

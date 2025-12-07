@@ -113,7 +113,7 @@ const FolderSVG = ({
                     </div>
 
                     <motion.h3
-                        className="text-white text-center font-bold tracking-tight relative z-10 mix-blend-overlay font-array"
+                        className="text-white text-center font-bold tracking-tight relative z-10 mix-blend-overlay font-clash "
                         style={{
                             fontSize: "clamp(0.8rem, 1.5vw, 1rem)",
                             textShadow: "0 4px 12px rgba(0,0,0,0.5)",

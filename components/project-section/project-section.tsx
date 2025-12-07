@@ -1,9 +1,9 @@
 "use client"
 
 import Folder from "./folder"
+import React, { useState, useEffect } from "react"
 import { ShootingStars } from "../ui/shooting-stars"
 import { StarsBackground } from "../ui/stars-background"
-import React, { useState, useEffect } from "react"
 import { motion, AnimatePresence, Variants } from "framer-motion"
 
 const projects = [
@@ -12,7 +12,7 @@ const projects = [
         description:
             "Built a live React component editor enabling users to paste component snippets (with local state management via useState), render components in isolated iFrames, and edit visually via element selection. Live code generation with syntax updates.",
         techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "Node.js", "Framer Motion", "Supabase"],
-        github: "https://canvas-dun-one.vercel.app/",
+        github: "https://github.com/Anirudh-rb26/canvas",
         deployment: "https://canvas-dun-one.vercel.app/",
         projectType: "./Project / Learning",
         privacy: "public",
@@ -21,9 +21,9 @@ const projects = [
     },
     {
         name: "Qpi Ai Pro",
-        description: "Qpi AI Pro's landing site.",
+        description: "Landing site for QpiAI Pro built under a tight schedule.",
         techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "Node.js", "Framer Motion"],
-        link: "https://qpiai-pro.tech",
+        deployment: "https://www.qpiai-pro.tech/",
         projectType: "./Project / Professional",
         privacy: "public",
         version: "V 1.0",
@@ -33,7 +33,8 @@ const projects = [
         name: "Review Co-Pilot",
         description: "AI-powered review analytics platform using FastAPI and Next.js — leveraging NLTK sentiment analysis, TF-IDF similarity search, and Gemini LLM responses.",
         techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "FastAPI", "Scikit", "NLTK", "Gemini"],
-        link: "https://review-copilot-frontend.vercel.app/",
+        deployment: "https://review-copilot-frontend.vercel.app/",
+        github: "https://github.com/Anirudh-rb26/review-copilot-frontend",
         projectType: "./Project / Experimental",
         privacy: "public",
         version: "V 1.0",
@@ -43,7 +44,7 @@ const projects = [
         name: "Convoflow",
         description: "Real-time AI chat system that combines LiveKit's real-time communication capabilities with memory-enhanced contextual conversations using Mem0.",
         techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "FastAPI", "LiveKit", "Mem0", "Gemini"],
-        link: "https://github.com/Anirudh-rb26/ConvoFlow",
+        github: "https://github.com/Anirudh-rb26/ConvoFlow",
         projectType: "./Project / Experimental",
         privacy: "public",
         version: "V 1.0",
@@ -53,7 +54,7 @@ const projects = [
         name: "AI Interview Bot",
         description: "An intelligent interviewing platform that conducts automated interviews based on resumes and job descriptions.",
         techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "Node.js", "Google AI Studio", "Supabase"],
-        link: "https://github.com/Anirudh-rb26/ai-interviewer",
+        github: "https://github.com/Anirudh-rb26/ai-interviewer",
         projectType: "./Project / Experimental",
         privacy: "public",
         version: "V 1.0",
@@ -63,7 +64,8 @@ const projects = [
         name: "Interview Question Generator",
         description: "AI-powered tool that generates customized interview questions based on job role, description, and experience level",
         techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "Node.js", "Google AI Studio"],
-        link: "https://interview-question-generator-five.vercel.app/",
+        deployment: "https://interview-question-generator-five.vercel.app/",
+        github: "https://github.com/Anirudh-rb26/InterviewQuestion-Generator",
         projectType: "./Project / Experimental",
         privacy: "public",
         version: "V 1.0",
@@ -71,29 +73,19 @@ const projects = [
     },
     {
         name: "DepthText",
-        description: "Computer vision app that adds text behind subjects in images using Mobile-SAM for segmentation",
+        description: "Computer vision app that adds text behind subjects in images using ONNX Mobile-SAM for segmentation. [IN PROGRESS]",
         techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "Node.js", "Mobile-SAM", "ONNX"],
-        link: "In Progress",
-        projectType: "./Project / Experimental",
-        privacy: "private", // Assuming 'In Progress' means it's not publicly deployed/available yet
-        version: "V 1.0",
-        type: "web",
-    },
-    {
-        name: "Airbnb Clone",
-        description: "Full-stack Airbnb clone with property listings, booking, and user authentication",
-        techstack: ["Next.js", "Tailwind CSS", "TypeScript", "React", "Node.js", "Supabase", "Prisma", "Kinde"],
-        link: "https://airbnb-clone-3h68.vercel.app/",
-        projectType: "./Project / Learning",
-        privacy: "public",
-        version: "V 1.0",
+        // link: "In Progress",
+        projectType: "./Project / In Progress",
+        privacy: "stealth",
+        version: "V X.X",
         type: "web",
     },
     {
         name: "Zoom Clone",
         description: "Video conferencing application with real-time communication features",
         techstack: ["React", "WebRTC", "Socket.io"],
-        link: "https://zoom-clone-ike9.vercel.app/",
+        deployment: "https://zoom-clone-ike9.vercel.app/",
         projectType: "./Project / Learning",
         privacy: "public",
         version: "V 1.0",

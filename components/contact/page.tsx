@@ -8,25 +8,25 @@ import { Mail, Instagram, Linkedin, Github } from 'lucide-react';
 
 const demoItems: MenuItemProps[] = [
     {
-        link: '#',
+        link: 'mailto:anirudhjayakumar.business@gmail.com',
         text: 'Gmail',
         icon: Mail,
         brand: 'gmail',
     },
     {
-        link: '#',
+        link: 'https://www.instagram.com/anirudh.cr2/',
         text: 'Instagram',
         icon: Instagram,
         brand: 'instagram',
     },
     {
-        link: '#',
+        link: 'https://www.linkedin.com/in/anirudhjayakumar/',
         text: 'LinkedIn',
         icon: Linkedin,
         brand: 'linkedin',
     },
     {
-        link: '#',
+        link: 'https://github.com/Anirudh-rb26',
         text: 'Github',
         icon: Github,
         brand: 'github',

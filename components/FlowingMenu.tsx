@@ -2,6 +2,7 @@ import React from 'react';
 import { gsap } from 'gsap';
 import { LucideIcon } from 'lucide-react';
 
+
 export interface MenuItemProps {
   link: string;
   text: string;
@@ -9,9 +10,11 @@ export interface MenuItemProps {
   brand?: 'gmail' | 'instagram' | 'linkedin' | 'github';
 }
 
+
 interface FlowingMenuProps {
   items?: MenuItemProps[];
 }
+
 
 const brandStyles: Record<
   NonNullable<MenuItemProps['brand']>,
@@ -35,6 +38,7 @@ const brandStyles: Record<
   },
 };
 
+
 const FlowingMenu: React.FC<FlowingMenuProps> = ({ items = [] }) => {
   return (
     <div className="w-full h-full overflow-hidden">
@@ -47,12 +51,16 @@ const FlowingMenu: React.FC<FlowingMenuProps> = ({ items = [] }) => {
   );
 };
 
+
 const MenuItem: React.FC<MenuItemProps> = ({ link, text, icon: Icon, brand }) => {
+  const isMailto = link.startsWith('mailto:');
   const itemRef = React.useRef<HTMLDivElement>(null);
   const marqueeRef = React.useRef<HTMLDivElement>(null);
   const marqueeInnerRef = React.useRef<HTMLDivElement>(null);
 
+
   const animationDefaults = { duration: 0.6, ease: 'expo.inOut' };
+
 
   const findClosestEdge = (mouseX: number, mouseY: number, width: number, height: number): 'top' | 'bottom' => {
     const topEdgeDist = Math.pow(mouseX - width / 2, 2) + Math.pow(mouseY, 2);
@@ -60,10 +68,12 @@ const MenuItem: React.FC<MenuItemProps> = ({ link, text, icon: Icon, brand }) =>
     return topEdgeDist < bottomEdgeDist ? 'top' : 'bottom';
   };
 
+
   const handleMouseEnter = (ev: React.MouseEvent<HTMLAnchorElement>) => {
     if (!itemRef.current || !marqueeRef.current || !marqueeInnerRef.current) return;
     const rect = itemRef.current.getBoundingClientRect();
     const edge = findClosestEdge(ev.clientX - rect.left, ev.clientY - rect.top, rect.width, rect.height);
+
 
     const tl = gsap.timeline({ defaults: animationDefaults });
     tl.set(marqueeRef.current, { y: edge === 'top' ? '-101%' : '101%' })
@@ -71,15 +81,18 @@ const MenuItem: React.FC<MenuItemProps> = ({ link, text, icon: Icon, brand }) =>
       .to([marqueeRef.current, marqueeInnerRef.current], { y: '0%' });
   };
 
+
   const handleMouseLeave = (ev: React.MouseEvent<HTMLAnchorElement>) => {
     if (!itemRef.current || !marqueeRef.current || !marqueeInnerRef.current) return;
     const rect = itemRef.current.getBoundingClientRect();
     const edge = findClosestEdge(ev.clientX - rect.left, ev.clientY - rect.top, rect.width, rect.height);
 
+
     const tl = gsap.timeline({ defaults: animationDefaults });
     tl.to(marqueeRef.current, { y: edge === 'top' ? '-101%' : '101%' })
       .to(marqueeInnerRef.current, { y: edge === 'top' ? '101%' : '-101%' }, '<');
   };
+
 
   const repeatedMarqueeContent = React.useMemo(() => {
     const bgClass = brand ? brandStyles[brand]?.bg : 'bg-white';
@@ -99,6 +112,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ link, text, icon: Icon, brand }) =>
     ));
   }, [text, brand]);
 
+
   return (
     <div
       className="flex-1 relative overflow-hidden border-t border-white/10 hover:border-white/20 transition-colors"
@@ -107,6 +121,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ link, text, icon: Icon, brand }) =>
       <a
         className="flex justify-start items-center h-full w-full relative cursor-pointer uppercase no-underline font-bold text-white text-[clamp(2.5rem,6vw,8rem)] tracking-tighter leading-none transition-all duration-300 hover:scale-[1.02] hover:tracking-wide focus:text-white focus-visible:text-[#0a0a0a] py-[clamp(1rem,3vh,2rem)] px-[clamp(2rem,5vw,8rem)] gap-[clamp(1rem,3vw,4rem)]"
         href={link}
+        target={isMailto ? undefined : '_blank'}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
@@ -129,5 +144,6 @@ const MenuItem: React.FC<MenuItemProps> = ({ link, text, icon: Icon, brand }) =>
     </div>
   );
 };
+
 
 export default FlowingMenu;
