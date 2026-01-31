@@ -1,163 +1,306 @@
 "use client"
 
 import Link from "next/link"
-import { useState } from "react"
 import { motion } from "framer-motion"
+import { useState, useEffect, useRef } from "react"
+import { useLenis } from "lenis/react"
 
 export default function Navbar() {
+    const measureRef = useRef<HTMLDivElement>(null)
+    const [navWidth, setNavWidth] = useState("auto")
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [displayedName, setDisplayedName] = useState("")
+    const [displayedPath, setDisplayedPath] = useState("")
+    const [isInitialLoad, setIsInitialLoad] = useState(true)
+    const [fileLocation, setFileLocation] = useState<string | null>(null)
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen)
+    const closeMenu = () => setIsMenuOpen(false)
+    const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+
+    const lenis = useLenis();
+    const handleScroll = (e: React.MouseEvent, targetId: string, locationName: string | null) => {
+        e.preventDefault();
+        setFileLocation(locationName);
+
+        if (locationName === null) {
+            lenis?.scrollTo(0, { duration: 1.5 });
+        } else {
+            lenis?.scrollTo(targetId, { offset: -20, duration: 1.5 })
+        }
+
+        closeMenu();
     }
 
-    const closeMenu = () => {
-        setIsMenuOpen(false)
-    }
+    const nameText = "Anirudh"
+
+    // Animate the name typing on mount
+    useEffect(() => {
+        const timeouts: NodeJS.Timeout[] = []
+        nameText.split("").forEach((_, idx) => {
+            const timeout = setTimeout(() => {
+                setDisplayedName(nameText.slice(0, idx + 1))
+            }, idx * 80)
+            timeouts.push(timeout)
+        })
+        const finalTimeout = setTimeout(() => {
+            setIsInitialLoad(false)
+        }, nameText.length * 80 + 200)
+        timeouts.push(finalTimeout)
+
+        return () => timeouts.forEach(t => clearTimeout(t))
+    }, [])
+
+    // Animate path typing character by character
+    useEffect(() => {
+        if (!fileLocation) {
+            setDisplayedPath("")
+            return
+        }
+
+        setDisplayedPath("")
+        const timeouts: NodeJS.Timeout[] = []
+        fileLocation.split("").forEach((_, idx) => {
+            const timeout = setTimeout(() => {
+                setDisplayedPath(fileLocation.slice(0, idx + 1))
+            }, idx * 50)
+            timeouts.push(timeout)
+        })
+
+        return () => timeouts.forEach(t => clearTimeout(t))
+    }, [fileLocation])
+
+    // Measure and update width only when displayedPath changes
+    useEffect(() => {
+        if (measureRef.current) {
+            const width = measureRef.current.offsetWidth
+            setNavWidth(`${width}px`)
+        }
+    }, [displayedPath, displayedName])
 
     return (
         <motion.nav
-            className="fixed top-0 left-0 right-0 z-50 bg-black/30 backdrop-blur-xl border-b border-white/10 shadow-[0_8px_32px_0_rgba(114,0,156,0.1)]"
-            initial={{ y: -100, opacity: 0 }}
+            className="fixed top-4 z-50"
+            initial={{ y: -40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
         >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-16">
-                    <motion.div
-                        className="flex items-center"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2, duration: 0.6 }}
-                    >
+            {/* Hidden measurement div - now includes ALL desktop links */}
+            <div
+                ref={measureRef}
+                className="font-array backdrop-blur-2xl bg-black/30 border border-white/20 rounded-full px-4 sm:px-6 py-2 flex items-center gap-6 absolute opacity-0 pointer-events-none"
+                style={{
+                    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)'
+                }}
+            >
+                <div className="flex items-center text-xs sm:text-sm md:text-base font-array">
+                    <span className="text-white/40">~/ </span>
+                    <span className="text-white font-semibold">{nameText}</span>
+                    {displayedPath && (
+                        <>
+                            <span className="text-white/40"> / </span>
+                            <span className="text-white/70">{displayedPath}</span>
+                        </>
+                    )}
+                    <span className="ml-1 inline-block h-4 w-2 bg-white" />
+                </div>
+                <div className="hidden md:flex items-center gap-2 text-xs sm:text-sm">
+                    <div className="px-3 py-1.5 rounded-full">/projects</div>
+                    <div className="px-3 py-1.5 rounded-full">/gallery</div>
+                    <div className="px-3 py-1.5 rounded-full">/contact</div>
+                </div>
+                <div className="md:hidden ml-auto">
+                    <svg className="h-5 w-5" viewBox="0 0 24 24">
+                        <path d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </div>
+            </div>
+
+            {/* Floating container - iOS-style glassmorphism */}
+            <motion.div
+                className="font-array backdrop-blur-2xl bg-black/30 border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.4)] rounded-full px-4 sm:px-6 py-2 flex items-center justify-between gap-6"
+                style={{
+                    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)'
+                }}
+                animate={{
+                    width: navWidth
+                }}
+                transition={{
+                    duration: 0.3,
+                    ease: "easeOut"
+                }}
+            >
+                <div className="flex items-center text-xs sm:text-sm md:text-base font-array whitespace-nowrap">
+                    <span className="text-white/40">~/ </span>
+
+                    {/* Typing animation for "Anirudh" on initial load, clickable after */}
+                    {isInitialLoad ? (
+                        <div className="inline-flex">
+                            {displayedName.split("").map((char, idx) => (
+                                <span
+                                    key={`name-${idx}`}
+                                    className="text-dark-amethyst font-semibold"
+                                    style={{
+                                        opacity: 0,
+                                        animation: `fadeIn 0.1s ease-out ${idx * 0.08}s forwards`
+                                    }}
+                                >
+                                    {char}
+                                </span>
+                            ))}
+                        </div>
+                    ) : (
                         <Link
                             href="/"
-                            className="text-white font-mono text-lg font-bold relative group"
-                            style={{
-                                background: "linear-gradient(90deg, #72009C 0%, #72009C 50%, white 50%, white 100%)",
-                                backgroundSize: "200% 100%",
-                                WebkitBackgroundClip: "text",
-                                backgroundClip: "text",
-                                WebkitTextFillColor: "transparent",
-                                transition: "background-position 0.5s ease-out",
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundPosition = "0% 0"
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundPosition = "100% 0"
-                            }}
-                            onClick={closeMenu}
+                            className="text-dark-amethyst font-semibold hover:text-frosted-mint transition-colors cursor-pointer"
+                            onClick={(e) => handleScroll(e, '#home', '')}
                         >
-                            ~/anirudh
+                            {nameText}
+                        </Link>
+                    )}
+
+                    {displayedPath && displayedName === nameText && (
+                        <span className="text-frosted-mint/70"> / </span>
+                    )}
+
+                    {/* Character-by-character typed path */}
+                    {displayedName === nameText && displayedPath && (
+                        <span className="text-frosted-mint/70">
+                            {displayedPath}
+                        </span>
+                    )}
+
+                    {/* Blinking cursor - only show after name is done */}
+                    {displayedName && (
+                        <span className="ml-1 inline-block h-4 w-2 bg-white animate-blink" />
+                    )}
+                </div>
+
+                {/* Desktop links */}
+                <div className="hidden md:flex items-center gap-2 text-xs sm:text-sm whitespace-nowrap">
+                    <motion.div
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.35, duration: 0.4 }}
+                    >
+                        <Link
+                            href="#projects"
+                            className="px-3 py-1.5 rounded-full text-gray-300 hover:text-white hover:bg-frosted-mint/20 transition-colors"
+                            onClick={(e) => handleScroll(e, '#projects', 'projects')}
+                        >
+                            /projects
                         </Link>
                     </motion.div>
 
-                    {/* Desktop Navigation */}
-                    <div className="hidden md:block">
-                        <div className="ml-10 flex items-baseline space-x-4">
-                            <motion.div
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.3, duration: 0.5 }}
-                            >
-                                <Link
-                                    href="/"
-                                    className="text-gray-300 hover:text-[#72009C] px-3 py-2 text-sm font-mono transition-all duration-300 hover:bg-white/5 rounded-lg backdrop-blur-sm"
-                                >
-                                    hello()
-                                </Link>
-                            </motion.div>
-                            <motion.div
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.4, duration: 0.5 }}
-                            >
-                                <Link
-                                    href="/about"
-                                    className="text-gray-300 hover:text-[#72009C] px-3 py-2 text-sm font-mono transition-all duration-300 hover:bg-white/5 rounded-lg backdrop-blur-sm"
-                                >
-                                    info.me()
-                                </Link>
-                            </motion.div>
-                            <motion.div
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.5, duration: 0.5 }}
-                            >
-                                <Link
-                                    href="/contact"
-                                    className="text-gray-300 hover:text-[#72009C] px-3 py-2 text-sm font-mono transition-all duration-300 hover:bg-white/5 rounded-lg backdrop-blur-sm"
-                                >
-                                    contact.me()
-                                </Link>
-                            </motion.div>
-                        </div>
-                    </div>
-
-                    {/* Mobile menu button */}
                     <motion.div
-                        className="md:hidden"
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2, duration: 0.6 }}
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.35, duration: 0.4 }}
                     >
-                        <button
-                            onClick={toggleMenu}
-                            className="text-gray-300 hover:text-white focus:outline-none focus:text-white transition-colors"
-                            aria-label="Toggle menu"
+                        <Link
+                            href="#gallery"
+                            className="px-3 py-1.5 rounded-full text-gray-300 hover:text-white hover:bg-frosted-mint/20 transition-colors"
+                            onClick={(e) => handleScroll(e, '#gallery', 'gallery')}
                         >
-                            <svg
-                                className={`h-6 w-6 transition-transform duration-300 ${isMenuOpen ? "rotate-90" : ""}`}
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                {isMenuOpen ? (
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                ) : (
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                                )}
-                            </svg>
-                        </button>
+                            /gallery
+                        </Link>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4, duration: 0.4 }}
+                    >
+                        <Link
+                            href="#contact"
+                            className="px-3 py-1.5 rounded-full text-gray-300 hover:text-white hover:bg-frosted-mint/20 transition-colors"
+                            onClick={(e) => handleScroll(e, '#contact', 'contact')}
+                        >
+                            /contact
+                        </Link>
                     </motion.div>
                 </div>
 
-                {/* Mobile Navigation */}
-                <motion.div
-                    className="md:hidden overflow-hidden"
-                    initial={false}
-                    animate={{
-                        height: isMenuOpen ? "auto" : 0,
-                        opacity: isMenuOpen ? 1 : 0,
-                    }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                {/* Mobile menu button */}
+                <motion.button
+                    className="md:hidden ml-auto text-gray-300 hover:text-white transition-colors"
+                    onClick={toggleMenu}
+                    aria-label="Toggle menu"
+                    initial={{ opacity: 0, x: 12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.25, duration: 0.4 }}
                 >
-                    <div className="px-2 pt-2 pb-3 space-y-1 bg-black/40 backdrop-blur-xl rounded-b-lg border-t border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]">
-                        <Link
-                            href="/"
-                            className="text-gray-300 hover:text-[#72009C] block px-3 py-2 text-base font-mono transition-all duration-300 hover:bg-white/5 rounded-lg"
-                            onClick={closeMenu}
-                        >
-                            hello()
-                        </Link>
-                        <Link
-                            href="/about"
-                            className="text-gray-300 hover:text-[#72009C] block px-3 py-2 text-base font-mono transition-all duration-300 hover:bg-white/5 rounded-lg"
-                            onClick={closeMenu}
-                        >
-                            info.me()
-                        </Link>
-                        <Link
-                            href="/contact"
-                            className="text-gray-300 hover:text-[#72009C] block px-3 py-2 text-base font-mono transition-all duration-300 hover:bg-white/5 rounded-lg"
-                            onClick={closeMenu}
-                        >
-                            contact.me()
-                        </Link>
-                    </div>
-                </motion.div>
-            </div>
+                    <svg
+                        className={`h-5 w-5 transition-transform duration-300 ${isMenuOpen ? "rotate-90" : ""
+                            }`}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        {isMenuOpen ? (
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                            />
+                        ) : (
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M4 6h16M4 12h16M4 18h16"
+                            />
+                        )}
+                    </svg>
+                </motion.button>
+            </motion.div>
+
+            {/* Mobile dropdown under pill - iOS-style glassmorphism */}
+            <motion.div
+                className="md:hidden mt-2 overflow-hidden font-array items-center justify-center flex"
+                initial={false}
+                animate={{
+                    height: isMenuOpen ? "auto" : 0,
+                    opacity: isMenuOpen ? 1 : 0,
+                }}
+                transition={{ duration: 0.25, ease: "easeInOut" }}
+            >
+                <div
+                    className="px-3 py-2 backdrop-blur-2xl bg-black/30 rounded-2xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.4)] space-y-1"
+                    style={{
+                        boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)'
+                    }}
+                >
+                    <Link
+                        href="#projects"
+                        className="block px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-colors text-sm"
+                        onClick={(e) => handleScroll(e, '#projects', 'projects')}
+                    >
+                        /projects
+                    </Link>
+                    <Link
+                        href="#gallery"
+                        className="block px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-colors text-sm"
+                        onClick={(e) => handleScroll(e, '#gallery', 'gallery')}
+                    >
+                        /gallery
+                    </Link>
+                    <Link
+                        href="#contact"
+                        className="block px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-colors text-sm"
+                        onClick={(e) => handleScroll(e, '#contact', 'contact')}
+                    >
+                        /contact
+                    </Link>
+                </div>
+            </motion.div>
+
+            <style jsx>{`
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+            `}</style>
         </motion.nav>
     )
 }

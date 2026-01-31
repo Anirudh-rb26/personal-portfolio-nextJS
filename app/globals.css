@@ -3,8 +3,59 @@
 
 @custom-variant dark (&:is(.dark *));
 
-:root {
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
 
+@theme inline {
+  /* Heading */
+  --text-heading: 128px;
+  --leading-heading: 0.85;
+  --tracking-heading: -0.03em;
+
+  /* Subheading */
+  --text-subheading: 48px;
+  --leading-subheading: 0.95;
+  --tracking-subheading: -0.03em;
+
+  /* Body */
+  --text-body: 24px;
+  --leading-body: 1.2;
+  --tracking-body: -0.01em;
+
+  /* Colors */
+  --color-dark-amethyst: #72009c;
+  --color-baltic-blue: #456990;
+  --color-frosted-mint: #e4fde1;
+  --color-bubblegum-pink: #f45b69;
+
+  --font-clash: var(--font-clash);
+  --font-array: var(--font-array);
+  --font-satoshi: var(--font-satoshi);
+  --font-melodrama: var(--font-melodrama);
+  --font-jetbrains: var(--font-jetbrains-mono);
+}
+
+@utility heading {
+  font-size: var(--text-heading);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
+}
+
+@utility subheading {
+  font-size: var(--text-subheading);
+  line-height: var(--leading-subheading);
+  letter-spacing: var(--tracking-subheading);
+}
+
+@utility bodytext {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-body);
+}
+
+:root {
   /* Text colors */
   --text-inactive: #9ca3af;
   --text-primary: #ffffff;
