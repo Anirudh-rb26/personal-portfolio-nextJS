@@ -1,6 +1,7 @@
-import Hero from "@/components/hero/hero";
-import ContactPage from "@/components/contact/page";
+import Hero from "@/components/hero-section/hero";
+import ContactPage from "@/components/contact-section/page";
 import ProjectGrid from "@/components/project-section/project-section";
+import AboutSection from "@/components/about-section/page";
 
 export default function Home() {
   return (
@@ -17,6 +18,13 @@ export default function Home() {
       <section id="projects" className="relative z-10 w-full bg-neutral-950">
         <div className="relative w-full">
           <ProjectGrid />
+        </div>
+      </section>
+
+      {/* SECTION 3: ABOUT */}
+      <section id="gallery" className="relative z-10 w-full bg-neutral-950">
+        <div className="relative w-full">
+          <AboutSection />
         </div>
       </section>
 

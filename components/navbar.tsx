@@ -84,7 +84,7 @@ export default function Navbar() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
         >
-            {/* Hidden measurement div */}
+            {/* Hidden measurement div - now includes ALL desktop links */}
             <div
                 ref={measureRef}
                 className="font-array backdrop-blur-2xl bg-black/30 border border-white/20 rounded-full px-4 sm:px-6 py-2 flex items-center gap-6 absolute opacity-0 pointer-events-none"
@@ -104,8 +104,9 @@ export default function Navbar() {
                     <span className="ml-1 inline-block h-4 w-2 bg-white" />
                 </div>
                 <div className="hidden md:flex items-center gap-2 text-xs sm:text-sm">
-                    <div className="px-3 py-1.5 rounded-full">info.me()</div>
-                    <div className="px-3 py-1.5 rounded-full">contact.me()</div>
+                    <div className="px-3 py-1.5 rounded-full">/projects</div>
+                    <div className="px-3 py-1.5 rounded-full">/gallery</div>
+                    <div className="px-3 py-1.5 rounded-full">/contact</div>
                 </div>
                 <div className="md:hidden ml-auto">
                     <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -193,6 +194,20 @@ export default function Navbar() {
                     <motion.div
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.35, duration: 0.4 }}
+                    >
+                        <Link
+                            href="#gallery"
+                            className="px-3 py-1.5 rounded-full text-gray-300 hover:text-white hover:bg-frosted-mint/20 transition-colors"
+                            onClick={(e) => handleScroll(e, '#gallery', 'gallery')}
+                        >
+                            /gallery
+                        </Link>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4, duration: 0.4 }}
                     >
                         <Link
@@ -262,6 +277,13 @@ export default function Navbar() {
                         onClick={(e) => handleScroll(e, '#projects', 'projects')}
                     >
                         /projects
+                    </Link>
+                    <Link
+                        href="#gallery"
+                        className="block px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-colors text-sm"
+                        onClick={(e) => handleScroll(e, '#gallery', 'gallery')}
+                    >
+                        /gallery
                     </Link>
                     <Link
                         href="#contact"

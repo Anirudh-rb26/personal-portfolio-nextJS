@@ -173,8 +173,8 @@ export default function ProjectGrid() {
                 viewport={{ once: true }}
             >
                 <h2 className="text-4xl sm:text-6xl lg:text-8xl font-bold text-white font-array">
-                    Project
-                    <span className="text-[#ec48a0] font-melodrama italic"> Showcase</span>
+                    Proof Of
+                    <span className="text-[#ec48a0] font-melodrama italic"> Work</span>
                 </h2>
             </motion.div>
 

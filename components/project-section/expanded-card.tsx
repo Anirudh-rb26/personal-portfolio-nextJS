@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom'
 import { motion, Variants } from 'framer-motion'
 import { ArrowUpRight, Github, X } from 'lucide-react'
 import React, { SetStateAction, useEffect, useState } from 'react'
+import { Button } from '../ui/button'
 
 interface ExpandedCardProps {
     name: string;
@@ -86,12 +87,12 @@ const ExpandedCard = ({
                 <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-blue-900/50 blur-[80px] pointer-events-none" />
 
                 {/* --- Close Button --- */}
-                <button
+                <Button
                     onClick={() => setIsOpen(false)}
                     className="absolute top-4 right-4 md:top-6 md:right-6 p-2 rounded-full border border-white/10 bg-black/20 hover:bg-white text-white hover:text-black transition-colors duration-300 z-50 backdrop-blur-sm cursor-pointer"
                 >
                     <X size={20} />
-                </button>
+                </Button>
 
                 {/* --- Content Wrapper --- */}
                 <div className="relative z-10 flex flex-col md:flex-row w-full h-full">
