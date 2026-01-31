@@ -1,9 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { ShootingStars } from "../ui/shooting-stars";
 import { motion, AnimatePresence } from "framer-motion";
 import { StarsBackground } from "../ui/stars-background";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, memo } from "react";
 import { X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 
 // --- TYPE DEFINITIONS ---
@@ -191,12 +192,13 @@ export default function ProofOfTaste() {
                 <ShootingStars />
             </div>
 
-            {/* Grain Overlay */}
+            {/* Grain Overlay - Optimized */}
             <div
                 className="absolute inset-0 opacity-[0.15] pointer-events-none -z-5"
                 style={{
                     backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' /%3E%3C/svg%3E")`,
                     backgroundRepeat: "repeat",
+                    willChange: "transform", // GPU acceleration hint
                 }}
             />
 
@@ -209,7 +211,7 @@ export default function ProofOfTaste() {
                     </h2>
                 </div>
 
-                {/* BENTO GRID - MOBILE OPTIMIZED */}
+                {/* BENTO GRID - OPTIMIZED */}
                 <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[160px] md:auto-rows-[280px] gap-2 md:gap-4">
                     {GALLERY_DATA.map((photo) => (
                         <BentoItem
@@ -221,20 +223,20 @@ export default function ProofOfTaste() {
                 </div>
             </div>
 
-            {/* --- RESPONSIVE MODAL INTERFACE --- */}
+            {/* --- OPTIMIZED MODAL INTERFACE --- */}
             <AnimatePresence>
                 {selectedId && selectedImage && (
                     <motion.div
-                        className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-8 bg-black/90 backdrop-blur-xl"
+                        className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-8 bg-black/90 backdrop-blur-sm"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={handleModalClick}
                     >
-                        {/* WRAPPER: Full height on mobile (100dvh), Boxed on desktop */}
+                        {/* WRAPPER */}
                         <div className="w-full max-w-7xl h-[100dvh] md:h-[85vh] flex flex-col md:flex-row gap-0 md:gap-6 items-center justify-center relative overflow-hidden md:overflow-visible">
 
-                            {/* 1. GLASS DETAILS CARD */}
+                            {/* 1. DETAILS CARD - Reduced blur */}
                             <motion.div
                                 initial={{ y: 50, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
@@ -243,9 +245,10 @@ export default function ProofOfTaste() {
                                 className="w-full md:w-[380px] shrink-0 
                                 h-[45%] md:h-full 
                                 overflow-y-auto 
-                                bg-zinc-900/80 md:bg-white/5 
-                                backdrop-blur-3xl border-t md:border border-white/10 
-                                shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] 
+                                bg-zinc-900/90 md:bg-zinc-900/70
+                                backdrop-blur-md
+                                border-t md:border border-white/10 
+                                shadow-2xl
                                 rounded-t-3xl md:rounded-2xl 
                                 p-6 md:p-8 flex flex-col order-2 md:order-1 relative"
                                 onClick={(e) => e.stopPropagation()}
@@ -262,7 +265,7 @@ export default function ProofOfTaste() {
                                         <span className="font-mono text-[10px] text-[#72009C] uppercase tracking-widest border border-[#72009C]/30 px-2 py-1 rounded-full bg-[#72009C]/5">
                                             0{selectedImage.id}
                                         </span>
-                                        {/* Mobile Close Button (Inline) */}
+                                        {/* Mobile Close Button */}
                                         <button
                                             onClick={handleModalClick}
                                             className="md:hidden p-2 text-white/50 hover:text-white"
@@ -298,7 +301,7 @@ export default function ProofOfTaste() {
                                 </div>
                             </motion.div>
 
-                            {/* 2. GLASS IMAGE CONTAINER */}
+                            {/* 2. IMAGE CONTAINER - Reduced blur */}
                             <motion.div
                                 initial={{ scale: 0.95, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
@@ -306,8 +309,9 @@ export default function ProofOfTaste() {
                                 transition={{ type: "spring", damping: 30, stiffness: 300, delay: 0.05 }}
                                 className="flex-1 w-full relative 
                                 h-[55%] md:h-full 
-                                bg-black md:bg-white/5 
-                                backdrop-blur-2xl border-b md:border border-white/10 
+                                bg-black md:bg-zinc-900/50
+                                backdrop-blur-sm
+                                border-b md:border border-white/10 
                                 md:rounded-2xl overflow-hidden group 
                                 order-1 md:order-2 flex items-center justify-center"
                                 onClick={(e) => e.stopPropagation()}
@@ -315,7 +319,7 @@ export default function ProofOfTaste() {
                                 {/* Desktop Close Button */}
                                 <button
                                     onClick={handleModalClick}
-                                    className="hidden md:block absolute top-4 right-4 z-50 p-2 rounded-full bg-black/40 text-white/70 hover:bg-white/10 hover:text-white transition-all border border-white/5 hover:border-white/20 backdrop-blur-md"
+                                    className="hidden md:block absolute top-4 right-4 z-50 p-2 rounded-full bg-black/60 text-white/70 hover:bg-black/80 hover:text-white transition-all border border-white/10"
                                     aria-label="Close modal"
                                 >
                                     <X size={20} />
@@ -324,30 +328,38 @@ export default function ProofOfTaste() {
                                 {/* Nav Buttons */}
                                 <button
                                     onClick={(e) => { e.stopPropagation(); prevImage(); }}
-                                    className="absolute left-2 md:left-4 z-20 p-4 md:p-3 rounded-full md:bg-black/20 text-white/50 hover:bg-white/10 hover:text-white backdrop-blur-md transition-all md:opacity-0 group-hover:opacity-100"
+                                    className="absolute left-2 md:left-4 z-20 p-4 md:p-3 rounded-full md:bg-black/40 text-white/70 hover:bg-black/60 hover:text-white transition-all md:opacity-0 group-hover:opacity-100"
                                     aria-label="Previous image"
                                 >
                                     <ChevronLeft size={24} />
                                 </button>
                                 <button
                                     onClick={(e) => { e.stopPropagation(); nextImage(); }}
-                                    className="absolute right-2 md:right-4 z-20 p-4 md:p-3 rounded-full md:bg-black/20 text-white/50 hover:bg-white/10 hover:text-white backdrop-blur-md transition-all md:opacity-0 group-hover:opacity-100"
+                                    className="absolute right-2 md:right-4 z-20 p-4 md:p-3 rounded-full md:bg-black/40 text-white/70 hover:bg-black/60 hover:text-white transition-all md:opacity-0 group-hover:opacity-100"
                                     aria-label="Next image"
                                 >
                                     <ChevronRight size={24} />
                                 </button>
 
                                 <AnimatePresence mode="wait">
-                                    <motion.img
+                                    <motion.div
                                         key={selectedImage.id}
-                                        src={selectedImage.src}
-                                        alt={selectedImage.title}
-                                        className="w-full h-full object-contain p-0 md:p-4 drop-shadow-2xl"
-                                        initial={{ opacity: 0, scale: 0.98 }}
-                                        animate={{ opacity: 1, scale: 1 }}
+                                        className="relative w-full h-full p-0 md:p-4"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
-                                        transition={{ duration: 0.3 }}
-                                    />
+                                        transition={{ duration: 0.2 }}
+                                    >
+                                        <Image
+                                            src={selectedImage.src}
+                                            alt={selectedImage.title}
+                                            fill
+                                            className="object-contain drop-shadow-2xl"
+                                            sizes="(max-width: 768px) 100vw, 80vw"
+                                            priority
+                                            quality={90}
+                                        />
+                                    </motion.div>
                                 </AnimatePresence>
                             </motion.div>
                         </div>
@@ -371,7 +383,7 @@ interface DetailBlockProps {
     value: string | null;
 }
 
-function DetailBlock({ label, value }: DetailBlockProps) {
+const DetailBlock = memo(function DetailBlock({ label, value }: DetailBlockProps) {
     if (!value || value === "Unknown" || value.includes("--")) return null;
     return (
         <div className="flex flex-col gap-0.5 md:gap-1">
@@ -379,44 +391,50 @@ function DetailBlock({ label, value }: DetailBlockProps) {
             <span className="text-xs md:text-sm font-mono text-zinc-200">{value}</span>
         </div>
     );
-}
+});
 
 interface BentoItemProps {
     photo: GalleryPhoto;
     onClick: (id: number) => void;
 }
 
-const BentoItem = ({ photo, onClick }: BentoItemProps) => {
+const BentoItem = memo(function BentoItem({ photo, onClick }: BentoItemProps) {
     const handleClick = useCallback(() => {
         onClick(photo.id);
     }, [onClick, photo.id]);
 
     return (
         <motion.div
-            layoutId={`card-${photo.id}`}
             onClick={handleClick}
             className={`relative group overflow-hidden rounded-lg md:rounded-xl cursor-pointer bg-zinc-900 border border-white/5 ${photo.size}`}
             whileHover={{ y: -4 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
         >
-            <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/80 to-transparent opacity-60 md:opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/80 to-transparent opacity-60 md:opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
+            {/* Zoom Icon */}
             <div className="absolute top-2 right-2 md:top-3 md:right-3 z-30 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="bg-black/30 backdrop-blur-md p-1.5 md:p-2 rounded-full text-white border border-white/10">
+                <div className="bg-black/40 backdrop-blur-sm p-1.5 md:p-2 rounded-full text-white border border-white/10">
                     <Maximize2 size={12} className="md:w-[14px] md:h-[14px]" />
                 </div>
             </div>
 
+            {/* Title */}
             <div className="absolute bottom-0 left-0 w-full p-3 md:p-4 z-30 translate-y-0 md:translate-y-4 group-hover:translate-y-0 opacity-100 md:opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out">
                 <span className="text-[10px] md:text-xs font-bold font-mono text-white uppercase tracking-wider drop-shadow-md">{photo.title}</span>
             </div>
 
-            <motion.img
+            {/* Next.js Image with priority for above-the-fold images */}
+            <Image
                 src={photo.src}
                 alt={photo.title}
-                loading="lazy"
-                className="w-full h-full object-cover grayscale brightness-[0.85] group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700 ease-[0.25,1,0.5,1] group-hover:scale-110"
+                fill
+                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 350px"
+                className="object-cover grayscale brightness-[0.85] group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-500 ease-out group-hover:scale-105"
+                priority={photo.id <= 4} // Priority load first 4 images
+                quality={75}
             />
         </motion.div>
     );
-};
+});
