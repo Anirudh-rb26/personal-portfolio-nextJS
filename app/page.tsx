@@ -21,7 +21,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SECTION 3: ABOUT */}
+      {/* SECTION 3: ABOUT Test */}
       <section id="gallery" className="relative z-10 w-full bg-neutral-950">
         <div className="relative w-full">
           <AboutSection />
