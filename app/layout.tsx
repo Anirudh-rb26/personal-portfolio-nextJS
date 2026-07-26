@@ -1,10 +1,10 @@
 import "./globals.css"
 import type React from "react"
 import type { Metadata } from "next"
+import Navbar from "@/components/navbar";
 import { JetBrains_Mono } from "next/font/google";
 import { LenisProvider } from "@/providers/lenis-provider";
 import { array, clashDisplay, melodrama, satoshi } from "@/utils/font-loader";
-import Navbar from "@/components/navbar";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],

@@ -1,5 +1,5 @@
-import { ImageResponse } from "next/og"
 import { Code } from "lucide-react"
+import { ImageResponse } from "next/og"
 
 export const runtime = "edge"
 export const size = {

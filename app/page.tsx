@@ -1,7 +1,7 @@
 import Hero from "@/components/hero-section/hero";
+import AboutSection from "@/components/about-section/page";
 import ContactPage from "@/components/contact-section/page";
 import ProjectGrid from "@/components/project-section/project-section";
-import AboutSection from "@/components/about-section/page";
 
 export default function Home() {
   return (
