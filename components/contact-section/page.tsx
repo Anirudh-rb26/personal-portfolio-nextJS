@@ -2,7 +2,8 @@
 
 import FlowingMenu, { MenuItemProps } from "../FlowingMenu";
 import CloudBackgroundLayer from "./cloud-background";
-import { Mail, Instagram, Linkedin, Github } from "lucide-react";
+import { Mail } from "lucide-react";
+import { Instagram, Linkedin, Github } from "../social-icons";
 
 const links: MenuItemProps[] = [
   { link: "mailto:anirudhjayakumar.business@gmail.com", text: "Email", icon: Mail, brand: "gmail" },
