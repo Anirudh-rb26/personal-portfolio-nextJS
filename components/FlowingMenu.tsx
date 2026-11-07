@@ -22,19 +22,19 @@ const brandStyles: Record<
 > = {
   gmail: {
     // Google blue
-    bg: 'bg-[linear-gradient(90deg,#4285F4,#EA4335)]',
+    bg: 'bg-[#24112e]',
   },
   instagram: {
     // Instagram gradient
-    bg: 'bg-[linear-gradient(45deg,#F58529,#FEDA77,#DD2A7B,#8134AF,#515BD4)]',
+    bg: 'bg-[#24112e]',
   },
   linkedin: {
     // LinkedIn blue
-    bg: 'bg-[#0a66c2]',
+    bg: 'bg-[#24112e]',
   },
   github: {
     // GitHub dark
-    bg: 'bg-[#0d1117]',
+    bg: 'bg-[#24112e]',
   },
 };
 
@@ -70,7 +70,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ link, text, icon: Icon, brand }) =>
 
 
   const handleMouseEnter = (ev: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!itemRef.current || !marqueeRef.current || !marqueeInnerRef.current) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !itemRef.current || !marqueeRef.current || !marqueeInnerRef.current) return;
     const rect = itemRef.current.getBoundingClientRect();
     const edge = findClosestEdge(ev.clientX - rect.left, ev.clientY - rect.top, rect.width, rect.height);
 
@@ -83,7 +83,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ link, text, icon: Icon, brand }) =>
 
 
   const handleMouseLeave = (ev: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!itemRef.current || !marqueeRef.current || !marqueeInnerRef.current) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !itemRef.current || !marqueeRef.current || !marqueeInnerRef.current) return;
     const rect = itemRef.current.getBoundingClientRect();
     const edge = findClosestEdge(ev.clientX - rect.left, ev.clientY - rect.top, rect.width, rect.height);
 
@@ -119,9 +119,10 @@ const MenuItem: React.FC<MenuItemProps> = ({ link, text, icon: Icon, brand }) =>
       ref={itemRef}
     >
       <a
-        className="flex justify-start items-center h-full w-full relative cursor-pointer uppercase no-underline font-bold text-white text-[clamp(2.5rem,6vw,8rem)] tracking-tighter leading-none transition-all duration-300 hover:scale-[1.02] hover:tracking-wide focus:text-white focus-visible:text-[#0a0a0a] py-[clamp(1rem,3vh,2rem)] px-[clamp(2rem,5vw,8rem)] gap-[clamp(1rem,3vw,4rem)]"
+        className="flex justify-start items-center h-full w-full relative cursor-pointer uppercase no-underline font-bold text-white text-[clamp(2.5rem,6vw,8rem)] tracking-tighter leading-none transition-all duration-300 hover:scale-[1.02] hover:tracking-wide focus:text-white py-[clamp(1rem,3vh,2rem)] px-[clamp(2rem,5vw,8rem)] gap-[clamp(1rem,3vw,4rem)]"
         href={link}
         target={isMailto ? undefined : '_blank'}
+        rel={isMailto ? undefined : 'noopener noreferrer'}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
@@ -134,6 +135,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ link, text, icon: Icon, brand }) =>
       <div
         className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none bg-gradient-to-br from-white via-gray-50 to-gray-100 translate-y-[101%]"
         ref={marqueeRef}
+        aria-hidden="true"
       >
         <div className="h-full w-[200%] flex" ref={marqueeInnerRef}>
           <div className="flex items-center relative h-full w-[200%] will-change-transform animate-marquee">

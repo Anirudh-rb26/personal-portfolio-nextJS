@@ -1,41 +1,15 @@
-import "./globals.css"
-import type React from "react"
-import type { Metadata } from "next"
-import Navbar from "@/components/navbar";
-import { JetBrains_Mono } from "next/font/google";
-import { LenisProvider } from "@/providers/lenis-provider";
+import "lenis/dist/lenis.css";
+import "./globals.css";
+import type { Metadata } from "next";
 import { array, clashDisplay, melodrama, satoshi } from "@/utils/font-loader";
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
-})
+import { LenisProvider } from "@/providers/lenis-provider";
 
 export const metadata: Metadata = {
-  title: "Anirudh Jayakumar",
-  description: "Fullstack Engineer/Developer",
-  icons: {
-    icon: "/33.png",
-  },
-}
+  title: "Anirudh Jayakumar — Founding Engineer & Product Builder",
+  description: "Selected work and projects by Anirudh Jayakumar, founding engineer at terraledge.",
+  icons: { icon: "/33.png" },
+};
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
-  return (
-    <html lang="en">
-      <body
-        className={`${jetbrainsMono.variable} ${satoshi.variable} ${clashDisplay.variable} ${melodrama.variable} ${array.variable} antialiased bg-black font-mono text-base leading-relaxed relative`}
-      >
-        <LenisProvider>
-          <div className="relative z-10 h-full w-full flex items-center justify-center overflow-auto">
-            <Navbar />
-            {children}
-          </div>
-        </LenisProvider>
-      </body>
-    </html >
-  )
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return <html lang="en"><body className={`${satoshi.variable} ${clashDisplay.variable} ${melodrama.variable} ${array.variable}`}><a href="#work" className="skip-link">Skip to work</a><LenisProvider>{children}</LenisProvider></body></html>;
 }

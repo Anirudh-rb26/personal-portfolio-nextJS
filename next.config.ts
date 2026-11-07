@@ -1,26 +1,5 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "api.microlink.io",
-      },
-      {
-        protocol: "https",
-        hostname: "cdn.simpleicons.org",
-      },
-      {
-        protocol: "https",
-        hostname: "picsum.photos",
-      },
-    ],
-  },
-
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-};
+const nextConfig: NextConfig = {};
 
 export default nextConfig;
